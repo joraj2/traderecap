@@ -1,0 +1,33 @@
+{
+  "appId": "com.edgebook.app",
+  "appName": "EdgeBook",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#0a0d0c",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0a0d0c",
+      "overlaysWebView": false
+    },
+    "AdMob": {
+      "applicationIdAndroid": "ca-app-pub-3940256099942544~3347511713"
+    }
+  }
+}

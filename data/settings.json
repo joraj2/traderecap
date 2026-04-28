@@ -1,0 +1,31 @@
+{
+  "trader_name": "Trader",
+  "starting_balance": 25000,
+  "currency": "USD",
+  "goals": {
+    "daily": 500,
+    "weekly": 2500,
+    "monthly": 10000,
+    "yearly": 100000
+  },
+  "session_hours": {
+    "premarket_start": "04:00",
+    "open": "09:30",
+    "close": "16:00",
+    "afterhours_end": "20:00"
+  },
+  "ui": {
+    "theme": "dark",
+    "default_tab": "today"
+  },
+  "motivational_lines": [
+    "Stay consistent and trust your process.",
+    "Patience pays. Wait for the A+ setup.",
+    "Risk first, profit second.",
+    "Process over outcomes — every trade.",
+    "Edge is repeatable. Tilt is not.",
+    "Plan the trade. Trade the plan.",
+    "Cut losers fast. Let winners run.",
+    "Read the tape, not the news."
+  ]
+}

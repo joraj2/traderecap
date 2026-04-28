@@ -1,0 +1,48 @@
+{
+  "setups": [
+    "vwap_reclaim",
+    "opening_range_breakout",
+    "morning_panic_dip_buy",
+    "abcd_continuation",
+    "first_red_day",
+    "first_green_day",
+    "gap_and_go",
+    "gap_fade",
+    "trend_pullback",
+    "breakdown_short",
+    "supply_zone_short",
+    "demand_zone_long",
+    "earnings_drift",
+    "post_earnings_fade",
+    "news_catalyst_continuation",
+    "range_break",
+    "range_fade",
+    "session_open_drive",
+    "ema_cross",
+    "key_level_reject"
+  ],
+  "emotions": [
+    "calm",
+    "fomo",
+    "revenge",
+    "fear",
+    "greed",
+    "tilt",
+    "confident",
+    "uncertain",
+    "bored",
+    "rushed"
+  ],
+  "catalysts": [
+    "earnings",
+    "guidance",
+    "fda",
+    "macro_data",
+    "fed",
+    "geopolitical",
+    "rotation",
+    "technical",
+    "news",
+    "no_catalyst"
+  ]
+}

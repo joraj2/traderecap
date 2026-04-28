@@ -1,0 +1,13 @@
+[
+  { "id": "chased_breakout", "label": "Chased breakout", "description": "Entered late after the move was extended" },
+  { "id": "oversized", "label": "Oversized", "description": "Position larger than plan / risk tolerance" },
+  { "id": "no_stop", "label": "No stop", "description": "Entered without a defined invalidation level" },
+  { "id": "moved_stop", "label": "Moved stop further", "description": "Widened risk after price went against me" },
+  { "id": "revenge_trade", "label": "Revenge trade", "description": "Entered to make back losses, not on a setup" },
+  { "id": "fomo", "label": "FOMO entry", "description": "Entered because of fear of missing out, not edge" },
+  { "id": "no_thesis", "label": "No clear thesis", "description": "Entered without a defined reason or plan" },
+  { "id": "exit_early", "label": "Exited too early", "description": "Closed before the planned target / signal" },
+  { "id": "exit_late", "label": "Held too long", "description": "Did not exit when the thesis broke" },
+  { "id": "averaged_down", "label": "Averaged down a loser", "description": "Added to a losing position outside of plan" },
+  { "id": "ignored_macro", "label": "Ignored macro", "description": "Took the trade despite hostile tape / catalyst" }
+]
