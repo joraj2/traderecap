@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">EdgeBook</string>
+    <string name="title_activity_main">EdgeBook</string>
+    <string name="package_name">com.edgebook.app</string>
+    <string name="custom_url_scheme">com.edgebook.app</string>
+</resources>
