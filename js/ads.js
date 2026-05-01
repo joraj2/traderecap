@@ -22,13 +22,15 @@ window.Ads = (function () {
     interstitial: 'ca-app-pub-3940256099942544/1033173712',
     rewarded: 'ca-app-pub-3940256099942544/5224354917'
   };
-  // TODO before launch: replace the three AD UNIT IDs (banner/interstitial/rewarded).
-  // App ID is set. Pending three ad unit IDs from AdMob console.
+  // Production AdMob IDs — Jora Nagra / EdgeBook (publisher 7067114010918613).
+  // These are used at runtime ONLY when Ads.init() is called with useTestAds:false.
+  // During dev keep useTestAds:true (in js/app.js) so we don't generate fraudulent
+  // impressions on our own account — Google bans accounts for that.
   const PROD_IDS = {
-    appId: 'ca-app-pub-7067114010918613~7901474698',
-    banner: 'REPLACE_ME_BANNER',
-    interstitial: 'REPLACE_ME_INTERSTITIAL',
-    rewarded: 'REPLACE_ME_REWARDED'
+    appId:        'ca-app-pub-7067114010918613~7901474698',
+    banner:       'ca-app-pub-7067114010918613/1502527815',
+    interstitial: 'ca-app-pub-7067114010918613/4712204574',
+    rewarded:     'ca-app-pub-7067114010918613/1868306973'
   };
 
   const BANNER_TABS = new Set(['calendar', 'analytics', 'watchlist', 'mistakes', 'macro', 'help']);
