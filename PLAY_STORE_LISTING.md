@@ -15,8 +15,8 @@ Copy/paste-ready content for the Google Play Console. Tweak before publishing.
 | Category | Finance |
 | Tags | Finance, Productivity, Investing |
 | Email | support@edgebook.app |
-| Website | https://edgebook.app |
-| Privacy policy URL | https://edgebook.app/privacy *(must be a public URL — host PRIVACY.md on GitHub Pages, Netlify, or your own domain)* |
+| Website | https://joraj2.github.io/edgebook/ *(temp — swap to edgebook.app once domain is registered)* |
+| Privacy policy URL | **https://joraj2.github.io/edgebook/privacy.html** ✅ live |
 
 ---
 
