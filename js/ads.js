@@ -22,9 +22,10 @@ window.Ads = (function () {
     interstitial: 'ca-app-pub-3940256099942544/1033173712',
     rewarded: 'ca-app-pub-3940256099942544/5224354917'
   };
-  // TODO before launch: replace these with your real AdMob unit IDs.
+  // TODO before launch: replace the three AD UNIT IDs (banner/interstitial/rewarded).
+  // App ID is set. Pending three ad unit IDs from AdMob console.
   const PROD_IDS = {
-    appId: 'REPLACE_ME_APP_ID',
+    appId: 'ca-app-pub-7067114010918613~7901474698',
     banner: 'REPLACE_ME_BANNER',
     interstitial: 'REPLACE_ME_INTERSTITIAL',
     rewarded: 'REPLACE_ME_REWARDED'
