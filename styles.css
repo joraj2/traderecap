@@ -39,6 +39,7 @@
 /* ===== Reset ===== */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; height: 100%; }
+html, body { overflow-x: hidden; max-width: 100vw; }
 body {
   font-family: var(--font);
   background: var(--bg);
@@ -562,6 +563,12 @@ a { color: inherit; text-decoration: none; }
 /* ===== Sections / two-col / three-col ===== */
 .row-2 { display: grid; gap: 12px; grid-template-columns: 2fr 1fr; }
 .row-3 { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); }
+/* CRUCIAL: prevent grid items from forcing the page wider than viewport.
+   Without this, a wide child (e.g. table with min-width: 560px) would push
+   the grid wider, then the page horizontally scrolls. */
+.row-2 > *, .row-3 > *, .stat-grid > *, .form-grid > * { min-width: 0; }
+.card { min-width: 0; }
+.content { min-width: 0; }
 .section-title {
   font-size: 12px;
   letter-spacing: .14em;
