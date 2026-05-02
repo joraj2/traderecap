@@ -13,8 +13,6 @@ window.Tabs.today = (function () {
 
     const streaks = Compute.streaks(trades);
     const greeting = greetingFor(new Date());
-    const motiv = settings.motivational_lines || [];
-    const motivLine = motiv[Math.floor(Math.random() * motiv.length)] || '';
 
     // Goal progress
     const wkStart = Compute.startOfWeek(today);
@@ -40,7 +38,6 @@ window.Tabs.today = (function () {
             <span class="sep">•</span>
             <span>Total trades logged: <strong class="num">${t.count}</strong></span>
           </div>
-          <div class="hero-quote">"${esc(motivLine)}"</div>
         </div>
         <div class="hero-pnl">
           <div class="hero-pnl-label">Today's P&amp;L</div>
@@ -61,23 +58,26 @@ window.Tabs.today = (function () {
         ${StatCard.render({ label: 'Avg R', value: Compute.fmtNum(t.avgR), info: 'Average R-multiple per trade' })}
       </div>
 
-      <div class="stat-grid stat-grid-4">
-        ${(() => {
-          const curve = Compute.equityCurve(trades);
-          const mdd = Compute.maxDrawdown(curve);
-          return StatCard.render({ label: 'Max Drawdown', value: Compute.fmtMoney(mdd), tone: 'neg', info: 'Largest peak-to-trough drop' });
-        })()}
-        ${StatCard.render({ label: 'Sharpe Ratio', value: Compute.fmtNum(Compute.sharpeRatio(trades)), info: 'Annualised, daily P&L' })}
-        ${StatCard.render({ label: 'Expectancy', value: Compute.fmtMoney(t.expectancy), tone: StatCard.tone(t.expectancy), info: 'Average $ per trade' })}
-        ${StatCard.render({ label: 'Best Trade', value: Compute.fmtMoney(t.bestTrade), tone: 'pos' })}
-      </div>
+      <details class="t-extra-stats" id="t-extra-stats">
+        <summary><span class="text-2" style="font-size:12px;">Show extended stats</span></summary>
+        <div class="stat-grid stat-grid-4" style="margin-top:8px;">
+          ${(() => {
+            const curve = Compute.equityCurve(trades);
+            const mdd = Compute.maxDrawdown(curve);
+            return StatCard.render({ label: 'Max Drawdown', value: Compute.fmtMoney(mdd), tone: 'neg', info: 'Largest peak-to-trough drop' });
+          })()}
+          ${StatCard.render({ label: 'Sharpe Ratio', value: Compute.fmtNum(Compute.sharpeRatio(trades)), info: 'Annualised, daily P&L' })}
+          ${StatCard.render({ label: 'Expectancy', value: Compute.fmtMoney(t.expectancy), tone: StatCard.tone(t.expectancy), info: 'Average $ per trade' })}
+          ${StatCard.render({ label: 'Best Trade', value: Compute.fmtMoney(t.bestTrade), tone: 'pos' })}
+        </div>
 
-      <div class="stat-grid stat-grid-4">
-        ${StatCard.render({ label: 'Worst Trade', value: Compute.fmtMoney(t.worstTrade), tone: 'neg' })}
-        ${StatCard.render({ label: 'Streak', value: `${streaks.current.n}${streaks.current.type}`, sub: `Best ${streaks.bestW}W / Worst ${streaks.bestL}L` })}
-        ${StatCard.render({ label: 'Avg Win', value: Compute.fmtMoney(t.avgWin), tone: 'pos' })}
-        ${StatCard.render({ label: 'Avg Loss', value: Compute.fmtMoney(t.avgLoss), tone: 'neg' })}
-      </div>
+        <div class="stat-grid stat-grid-4">
+          ${StatCard.render({ label: 'Worst Trade', value: Compute.fmtMoney(t.worstTrade), tone: 'neg' })}
+          ${StatCard.render({ label: 'Streak', value: `${streaks.current.n}${streaks.current.type}`, sub: `Best ${streaks.bestW}W / Worst ${streaks.bestL}L` })}
+          ${StatCard.render({ label: 'Avg Win', value: Compute.fmtMoney(t.avgWin), tone: 'pos' })}
+          ${StatCard.render({ label: 'Avg Loss', value: Compute.fmtMoney(t.avgLoss), tone: 'neg' })}
+        </div>
+      </details>
 
       <div class="card" style="margin-top:12px;">
         <div class="card-title-row">

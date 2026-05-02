@@ -144,7 +144,7 @@ window.Tabs.help = (function () {
     {
       cat: 'Contact',
       q: 'How do I report a bug or request a feature?',
-      a: 'Email <b>support@edgebook.app</b> with a description and a screenshot if possible. Bug reports with reproduction steps get fixed first.'
+      a: 'Email <b>support@traderecap.app</b> with a description and a screenshot if possible. Bug reports with reproduction steps get fixed first.'
     }
   ];
 
@@ -154,7 +154,7 @@ window.Tabs.help = (function () {
       <div class="help-hero card">
         <div class="help-hero-text">
           <h2 class="help-h2">Help & FAQ</h2>
-          <p class="text-2">Search common questions or browse by category. Can't find what you need? Email <b>support@edgebook.app</b>.</p>
+          <p class="text-2">Search common questions or browse by category. Can't find what you need? Email <b>support@traderecap.app</b>.</p>
         </div>
         <div class="help-search-wrap">
           <i data-lucide="search"></i>
@@ -172,9 +172,9 @@ window.Tabs.help = (function () {
       <div class="help-foot card">
         <div>
           <h3 style="margin:0 0 6px;font-size:14px;">Still stuck?</h3>
-          <p class="text-2" style="margin:0;font-size:13px;">Email <b>support@edgebook.app</b> with your question and (if relevant) a screenshot. We read every message.</p>
+          <p class="text-2" style="margin:0;font-size:13px;">Email <b>support@traderecap.app</b> with your question and (if relevant) a screenshot. We read every message.</p>
         </div>
-        <a class="btn btn-primary" href="mailto:support@edgebook.app?subject=EdgeBook%20support">
+        <a class="btn btn-primary" href="mailto:support@traderecap.app?subject=TradeRecap%20support">
           <i data-lucide="mail"></i><span>Email support</span>
         </a>
       </div>

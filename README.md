@@ -1,4 +1,4 @@
-# EdgeBook — Trading Journal
+# TradeRecap — Trading Journal
 
 A private, on-device trading journal for stocks, options, futures, and crypto. Log every trade, find your real edge with P&L heatmaps and equity curves, build a pattern playbook, and learn from named mistakes.
 
@@ -70,7 +70,7 @@ Full guide: [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md).
 
 ## Data
 
-Everything lives in `localStorage` under the `eb_*` keys. The starter JSON files in `data/` are read on first load only (and only when served over HTTP). Use **Export** in the topbar / More menu to download a full bundle. Use **Import** to load a previously exported bundle.
+Everything lives in `localStorage` under the `tr_*` keys. The starter JSON files in `data/` are read on first load only (and only when served over HTTP). Use **Export** in the topbar / More menu to download a full bundle. Use **Import** to load a previously exported bundle.
 
 To version your data with git, periodically Export and replace `data/*.json` with the bundle's contents.
 

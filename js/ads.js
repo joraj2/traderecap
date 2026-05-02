@@ -22,7 +22,7 @@ window.Ads = (function () {
     interstitial: 'ca-app-pub-3940256099942544/1033173712',
     rewarded: 'ca-app-pub-3940256099942544/5224354917'
   };
-  // Production AdMob IDs — Jora Nagra / EdgeBook (publisher 7067114010918613).
+  // Production AdMob IDs — Jora Nagra / TradeRecap (publisher 7067114010918613).
   // These are used at runtime ONLY when Ads.init() is called with useTestAds:false.
   // During dev keep useTestAds:true (in js/app.js) so we don't generate fraudulent
   // impressions on our own account — Google bans accounts for that.
@@ -36,7 +36,7 @@ window.Ads = (function () {
   const BANNER_TABS = new Set(['calendar', 'analytics', 'watchlist', 'mistakes', 'macro', 'help']);
   const INTERSTITIAL_MIN_GAP_MS = 2 * 60 * 60 * 1000;       // 2 hours
   const INTERSTITIAL_FIRST_DELAY_MS = 60 * 1000;             // 60s after first launch
-  const STORAGE_KEY = 'eb_ads_state';
+  const STORAGE_KEY = 'tr_ads_state';
 
   // ===== Internal state =====
   let isNative = false;

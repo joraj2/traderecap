@@ -1,7 +1,7 @@
 {
-  "name": "edgebook",
+  "name": "traderecap",
   "version": "1.0.0",
-  "description": "EdgeBook — trading journal for stocks, options, futures, and crypto.",
+  "description": "TradeRecap — trading journal for stocks, options, futures, and crypto.",
   "private": true,
   "scripts": {
     "build:web": "node scripts/build-web.js",

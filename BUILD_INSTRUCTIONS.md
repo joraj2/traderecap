@@ -1,4 +1,4 @@
-# Build & Launch — EdgeBook (Android)
+# Build & Launch — TradeRecap (Android)
 
 Step-by-step from a clean machine to a Play Store listing.
 
@@ -115,16 +115,16 @@ To convert the included `assets/icon-source.svg` to a 1024×1024 PNG:
 ## 5. Generate a signing key (one-time)
 
 ```bash
-keytool -genkeypair -v -keystore edgebook-release.jks -alias edgebook -keyalg RSA -keysize 2048 -validity 10000
+keytool -genkeypair -v -keystore traderecap-release.jks -alias traderecap -keyalg RSA -keysize 2048 -validity 10000
 ```
 
 You'll be asked for two passwords (use the same for both). **Save the keystore file and passwords somewhere safe — losing them means you can never update the app.** Back up to a password manager.
 
 In `android/key.properties` (create this file, do NOT commit):
 ```
-storeFile=../../edgebook-release.jks
+storeFile=../../traderecap-release.jks
 storePassword=YOUR_PASSWORD
-keyAlias=edgebook
+keyAlias=traderecap
 keyPassword=YOUR_PASSWORD
 ```
 
@@ -165,7 +165,7 @@ npm run android:release
 Test it on a real device first:
 ```bash
 # Convert AAB → APK for sideload testing
-bundletool build-apks --bundle=app-release.aab --output=test.apks --mode=universal --ks=../../edgebook-release.jks --ks-key-alias=edgebook
+bundletool build-apks --bundle=app-release.aab --output=test.apks --mode=universal --ks=../../traderecap-release.jks --ks-key-alias=traderecap
 unzip test.apks -d test
 adb install test/universal.apk
 ```
@@ -176,7 +176,7 @@ adb install test/universal.apk
 
 1. https://play.google.com/console → **Create app**
    - Default language: English (US)
-   - App name: EdgeBook
+   - App name: TradeRecap
    - App or Game: App
    - Free or Paid: Free
    - Declarations: tick all three (Developer Program Policies, US export laws)

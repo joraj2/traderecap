@@ -1,4 +1,4 @@
-# Play Store Listing — EdgeBook
+# Play Store Listing — TradeRecap
 
 Copy/paste-ready content for the Google Play Console. Tweak before publishing.
 
@@ -8,15 +8,15 @@ Copy/paste-ready content for the Google Play Console. Tweak before publishing.
 
 | Field | Value |
 |---|---|
-| App name | **EdgeBook** |
+| App name | **TradeRecap** |
 | Default language | English (United States) — `en-US` |
 | App or game | App |
 | Free or paid | Free |
 | Category | Finance |
 | Tags | Finance, Productivity, Investing |
-| Email | support@edgebook.app |
-| Website | https://joraj2.github.io/edgebook/ *(temp — swap to edgebook.app once domain is registered)* |
-| Privacy policy URL | **https://joraj2.github.io/edgebook/privacy.html** ✅ live |
+| Email | support@traderecap.app |
+| Website | https://joraj2.github.io/edgebook/ *(temp — rename GitHub repo edgebook → traderecap, then swap; eventually traderecap.app)* |
+| Privacy policy URL | **https://joraj2.github.io/edgebook/privacy.html** ✅ live (will become /traderecap/ after repo rename) |
 
 ---
 
@@ -37,10 +37,10 @@ Alternatives:
 ## Full description (max 4000 chars)
 
 ```
-EdgeBook is a private, on-device journal for serious traders. Log every trade across stocks, options, futures, and crypto. See your real edge with P&L heatmaps, equity curves, R-multiple distribution, and per-setup statistics. Build a personal pattern playbook so you stop trading from feel and start trading from data.
+TradeRecap is a private, on-device journal for serious traders. Log every trade across stocks, options, futures, and crypto. See your real edge with P&L heatmaps, equity curves, R-multiple distribution, and per-setup statistics. Build a personal pattern playbook so you stop trading from feel and start trading from data.
 
 WHY TRADERS USE A JOURNAL
-You can't fix what you don't measure. The traders who survive are the ones who go back over their trades, find their leaks, and trade their A-setups more often. EdgeBook makes that loop fast: log a trade in 30 seconds, see your stats update instantly, review the week on Sunday, repeat.
+You can't fix what you don't measure. The traders who survive are the ones who go back over their trades, find their leaks, and trade their A-setups more often. TradeRecap makes that loop fast: log a trade in 30 seconds, see your stats update instantly, review the week on Sunday, repeat.
 
 EVERYTHING IN ONE PLACE
 • Today — greeting, streak badge, today's P&L, goal progress, market note
@@ -81,7 +81,7 @@ WHO IT'S FOR
 Day traders, swing traders, options traders, futures traders, crypto traders. Anyone who's serious enough to journal but doesn't want to upload their P&L to a third party. New traders welcome — the app is built around the metrics professional traders track.
 
 CONTACT
-support@edgebook.app — feature requests and bug reports get read every week.
+support@traderecap.app — feature requests and bug reports get read every week.
 ```
 
 (~2,650 chars — well under the 4,000 limit)
@@ -93,7 +93,7 @@ support@edgebook.app — feature requests and bug reports get read every week.
 | Asset | Spec | Status |
 |---|---|---|
 | App icon | 512 × 512 PNG, 32-bit, ≤1 MB | Generate from `assets/icon-source.svg` |
-| Feature graphic | 1024 × 500 PNG/JPG | TODO — green-on-black banner with `EdgeBook` + tagline |
+| Feature graphic | 1024 × 500 PNG/JPG | TODO — green-on-black banner with `TradeRecap` + tagline |
 | Phone screenshots | 1080 × 1920 (or 9:16), min 2, max 8 | TODO — see screenshot plan below |
 | 7" tablet screenshots (optional) | 1200 × 1920 | Skip for v1 |
 | 10" tablet screenshots (optional) | 1920 × 1200 | Skip for v1 |

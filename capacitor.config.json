@@ -1,6 +1,6 @@
 {
-  "appId": "com.edgebook.app",
-  "appName": "EdgeBook",
+  "appId": "com.traderecap.app",
+  "appName": "TradeRecap",
   "webDir": "dist",
   "server": {
     "androidScheme": "https"
@@ -14,7 +14,7 @@
     "SplashScreen": {
       "launchShowDuration": 1200,
       "launchAutoHide": true,
-      "backgroundColor": "#0a0d0c",
+      "backgroundColor": "#f6f7f9",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
       "showSpinner": false,
@@ -22,8 +22,8 @@
       "splashImmersive": true
     },
     "StatusBar": {
-      "style": "DARK",
-      "backgroundColor": "#0a0d0c",
+      "style": "LIGHT",
+      "backgroundColor": "#f6f7f9",
       "overlaysWebView": false
     },
     "AdMob": {

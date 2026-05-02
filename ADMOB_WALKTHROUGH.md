@@ -1,4 +1,4 @@
-# AdMob Setup Walkthrough — EdgeBook
+# AdMob Setup Walkthrough — TradeRecap
 
 This is the manual sign-up process. **You** have to do this in a browser — Google does not let third parties create AdMob accounts on your behalf.
 
@@ -18,13 +18,13 @@ You'll land on the AdMob dashboard with empty cards.
 
 ---
 
-## Step 2 — Add the EdgeBook app (~3 min)
+## Step 2 — Add the TradeRecap app (~3 min)
 
 1. Left sidebar → **Apps** → **Add app** (top right, blue button).
 2. **Have you published your app on Google Play or the App Store?** → **No**.
    *(You haven't yet — this is fine. After Play Store launch you'll come back and link it.)*
 3. **Platform** → **Android**.
-4. **App name** → `EdgeBook`. Click **Add**.
+4. **App name** → `TradeRecap`. Click **Add**.
 5. AdMob now shows you a screen with your **App ID**. It looks like:
    ```
    ca-app-pub-1234567890123456~7654321098
@@ -37,7 +37,7 @@ You'll land on the AdMob dashboard with empty cards.
 
 ## Step 3 — Create the three ad units (~5 min)
 
-Still inside your EdgeBook app in AdMob, click **Add ad unit** (or sidebar → **Ad units** → **Add ad unit**).
+Still inside your TradeRecap app in AdMob, click **Add ad unit** (or sidebar → **Ad units** → **Add ad unit**).
 
 Create these three, one at a time:
 
@@ -120,7 +120,7 @@ Without a consent banner, ads served in the EU/UK will be non-personalized (lowe
 Sidebar → **Privacy & messaging** → **GDPR**:
 
 1. **Create message** → use the auto-generated default.
-2. **App** → select EdgeBook.
+2. **App** → select TradeRecap.
 3. **Languages** → English (add others later).
 4. **Vendors** → Accept Google's default IAB TCF v2.2 vendor list.
 5. **Publish**.
@@ -133,9 +133,9 @@ After publishing, the Capacitor AdMob plugin will surface the consent dialog aut
 
 ## Step 7 — Add `app-ads.txt` to your domain (anti-fraud, +revenue ~30%)
 
-Once you have a domain (`edgebook.app` or wherever your privacy policy is hosted), Google requires an `app-ads.txt` file at the root.
+Once you have a domain (`traderecap.app` or wherever your privacy policy is hosted), Google requires an `app-ads.txt` file at the root.
 
-In AdMob: **Apps → EdgeBook → App settings → app-ads.txt** → it shows the exact line to publish, e.g.:
+In AdMob: **Apps → TradeRecap → App settings → app-ads.txt** → it shows the exact line to publish, e.g.:
 ```
 google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
 ```

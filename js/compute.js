@@ -121,18 +121,30 @@ window.Compute = (function () {
   function tradesForDate(trades, dateISO) { return trades.filter(t => t.date === dateISO); }
 
   // Formatters
+  const CURRENCY_SYMBOLS = {
+    USD: '$', EUR: '€', GBP: '£', AUD: 'A$', NZD: 'NZ$',
+    CAD: 'C$', JPY: '¥', INR: '₹', SGD: 'S$', HKD: 'HK$'
+  };
+  function currencySymbol() {
+    try {
+      const code = (window.Store && Store.get && Store.get('settings') || {}).currency || 'USD';
+      return CURRENCY_SYMBOLS[code] || '$';
+    } catch (e) { return '$'; }
+  }
   function fmtMoney(v, signed = true) {
     const n = Number(v) || 0;
-    if (!signed) return `$${Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    const sym = currencySymbol();
+    if (!signed) return `${sym}${Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     const sign = n < 0 ? '-' : '+';
-    return `${sign}$${Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `${sign}${sym}${Math.abs(n).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   }
   function fmtMoneyShort(v) {
     const n = Number(v) || 0;
+    const sym = currencySymbol();
     const sign = n < 0 ? '-' : '+';
     const abs = Math.abs(n);
-    if (abs >= 1000) return `${sign}$${(abs / 1000).toFixed(2)}K`;
-    return `${sign}$${abs.toFixed(0)}`;
+    if (abs >= 1000) return `${sign}${sym}${(abs / 1000).toFixed(2)}K`;
+    return `${sign}${sym}${abs.toFixed(0)}`;
   }
   function fmtPct(v, d = 1) { return `${(v * 100).toFixed(d)}%`; }
   function fmtNum(v, d = 2) { return (Number(v) || 0).toFixed(d); }

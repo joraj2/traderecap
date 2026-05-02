@@ -1,6 +1,6 @@
 window.Store = (function () {
   const KEYS = ['trades', 'watchlist', 'patterns', 'mistakes', 'premarket', 'review', 'macro', 'tags', 'settings'];
-  const PREFIX = 'eb_';
+  const PREFIX = 'tr_';
   const state = {};
   const listeners = new Set();
 
@@ -10,8 +10,7 @@ window.Store = (function () {
     currency: 'USD',
     goals: { daily: 500, weekly: 2500, monthly: 10000, yearly: 100000 },
     session_hours: { premarket_start: '04:00', open: '09:30', close: '16:00', afterhours_end: '20:00' },
-    ui: { theme: 'dark', default_tab: 'today' },
-    motivational_lines: ['Stay consistent and trust your process.']
+    ui: { theme: 'light', default_tab: 'today' }
   };
 
   const DEFAULT_TAGS = {
@@ -112,7 +111,7 @@ window.Store = (function () {
   }
 
   function exportAll() {
-    downloadJSON(`edgebook-export-${new Date().toISOString().slice(0, 10)}.json`, state);
+    downloadJSON(`traderecap-export-${new Date().toISOString().slice(0, 10)}.json`, state);
   }
 
   function exportKey(key) {

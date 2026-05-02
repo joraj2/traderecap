@@ -30,6 +30,11 @@
     wireFab();
     await Store.loadAll();
 
+    // First-launch onboarding (blocks until user provides name + capital)
+    if (window.Onboarding) {
+      try { await Onboarding.maybeShow(); } catch (e) { console.warn(e); }
+    }
+
     // Initialize ads (no-op on web, real AdMob on Android via Capacitor)
     if (window.Ads) {
       try { await Ads.init({ useTestAds: true }); } catch (e) { console.warn(e); }
@@ -210,13 +215,15 @@
       <div class="form-grid cols-2">
         <div class="field"><label>Trader name</label><input name="trader_name" value="${esc(s.trader_name)}" /></div>
         <div class="field"><label>Starting balance</label><input name="starting_balance" type="number" step="any" value="${s.starting_balance}" /></div>
-        <div class="field"><label>Daily goal $</label><input name="g_daily" type="number" step="any" value="${s.goals.daily}" /></div>
-        <div class="field"><label>Weekly goal $</label><input name="g_weekly" type="number" step="any" value="${s.goals.weekly}" /></div>
-        <div class="field"><label>Monthly goal $</label><input name="g_monthly" type="number" step="any" value="${s.goals.monthly}" /></div>
-        <div class="field"><label>Yearly goal $</label><input name="g_yearly" type="number" step="any" value="${s.goals.yearly}" /></div>
-        <div class="field full"><label>Motivational lines (one per line)</label>
-          <textarea name="motiv" rows="5">${esc((s.motivational_lines || []).join('\n'))}</textarea>
+        <div class="field"><label>Currency</label>
+          <select name="currency">
+            ${['USD','EUR','GBP','AUD','NZD','CAD','JPY','INR','SGD','HKD'].map(c => `<option value="${c}" ${s.currency === c ? 'selected' : ''}>${c}</option>`).join('')}
+          </select>
         </div>
+        <div class="field"><label>Daily goal</label><input name="g_daily" type="number" step="any" value="${s.goals.daily}" /></div>
+        <div class="field"><label>Weekly goal</label><input name="g_weekly" type="number" step="any" value="${s.goals.weekly}" /></div>
+        <div class="field"><label>Monthly goal</label><input name="g_monthly" type="number" step="any" value="${s.goals.monthly}" /></div>
+        <div class="field"><label>Yearly goal</label><input name="g_yearly" type="number" step="any" value="${s.goals.yearly}" /></div>
       </div>
       <div class="divider"></div>
       <div style="display:flex; gap: 8px; flex-wrap: wrap;">
@@ -236,13 +243,13 @@
       Store.update('settings', curr => {
         curr.trader_name = fd.get('trader_name') || 'Trader';
         curr.starting_balance = Number(fd.get('starting_balance')) || 0;
+        curr.currency = fd.get('currency') || 'USD';
         curr.goals = {
           daily: Number(fd.get('g_daily')) || 0,
           weekly: Number(fd.get('g_weekly')) || 0,
           monthly: Number(fd.get('g_monthly')) || 0,
           yearly: Number(fd.get('g_yearly')) || 0
         };
-        curr.motivational_lines = (fd.get('motiv') || '').toString().split('\n').map(s => s.trim()).filter(Boolean);
       });
       Toast.success('Settings saved');
       Modal.close();

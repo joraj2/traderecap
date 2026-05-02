@@ -1,4 +1,4 @@
-package com.edgebook.app;
+package com.traderecap.app;
 
 import com.getcapacitor.BridgeActivity;
 

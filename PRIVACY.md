@@ -1,10 +1,10 @@
-# Privacy Policy — EdgeBook
+# Privacy Policy — TradeRecap
 
 **Effective date:** 28 April 2026
 **Publisher:** Jora Nagra (sole developer, New Zealand)
-**Contact:** support@edgebook.app
+**Contact:** support@traderecap.app
 
-This privacy policy explains what information EdgeBook ("the app", "we", "us") collects when you use our Android application, and what we do with it. We try to keep this short and clear because your trading data is sensitive and you deserve to know exactly what happens to it.
+This privacy policy explains what information TradeRecap ("the app", "we", "us") collects when you use our Android application, and what we do with it. We try to keep this short and clear because your trading data is sensitive and you deserve to know exactly what happens to it.
 
 ## 1. The data you create stays on your device
 
@@ -59,7 +59,7 @@ If we update this policy, we will publish the new version at the URL where you f
 
 ## 9. Contact
 
-Questions or requests: **support@edgebook.app**
+Questions or requests: **support@traderecap.app**
 
 ---
 
