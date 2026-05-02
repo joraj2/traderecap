@@ -15,8 +15,8 @@ Copy/paste-ready content for the Google Play Console. Tweak before publishing.
 | Category | Finance |
 | Tags | Finance, Productivity, Investing |
 | Email | support@traderecap.app |
-| Website | https://joraj2.github.io/edgebook/ *(temp — rename GitHub repo edgebook → traderecap, then swap; eventually traderecap.app)* |
-| Privacy policy URL | **https://joraj2.github.io/edgebook/privacy.html** ✅ live (will become /traderecap/ after repo rename) |
+| Website | https://joraj2.github.io/traderecap/ *(temp — rename GitHub repo edgebook → traderecap, then swap; eventually traderecap.app)* |
+| Privacy policy URL | **https://joraj2.github.io/traderecap/privacy.html** ✅ live (will become /traderecap/ after repo rename) |
 
 ---
 

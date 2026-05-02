@@ -142,7 +142,7 @@ google.com, pub-1234567890123456, DIRECT, f08c47fec0942fa0
 
 Save this as `app-ads.txt` in the root of the website where your privacy policy lives. AdMob auto-checks once a day. When it shows ✅ **Authorized**, your ads run at full eCPM (without this, advertisers bid lower because they can't verify you).
 
-If your privacy policy is on `joraj2.github.io/edgebook/`, then `app-ads.txt` goes at `joraj2.github.io/edgebook/app-ads.txt`. (GitHub Pages doesn't actually let you put files at the *root* of `joraj2.github.io` unless that's a repo named `joraj2.github.io` — for v1 you can park `app-ads.txt` next to the privacy policy and submit a custom domain later.)
+If your privacy policy is on `joraj2.github.io/traderecap/`, then `app-ads.txt` goes at `joraj2.github.io/traderecap/app-ads.txt`. (GitHub Pages doesn't actually let you put files at the *root* of `joraj2.github.io` unless that's a repo named `joraj2.github.io` — for v1 you can park `app-ads.txt` next to the privacy policy and submit a custom domain later.)
 
 ---
 

@@ -26,9 +26,9 @@ What's already done: 11 tabs, mobile-first responsive, Capacitor config, AdMob s
 | Step | Who | What |
 |---|---|---|
 | 1.1 | **You** | Either run `gh auth login` in a fresh PowerShell, **or** generate a fine-grained PAT at https://github.com/settings/tokens?type=beta (scopes: Administration r/w, Contents r/w, Pages r/w) and paste it to me |
-| 1.2 | **Me** | Create `https://github.com/joraj2/edgebook` (public), push 3 commits |
+| 1.2 | **Me** | Create `https://github.com/joraj2/traderecap` (public), push 3 commits |
 | 1.3 | **Me** | Enable GitHub Pages on `main` branch, root path |
-| 1.4 | **Me** | Verify `https://joraj2.github.io/edgebook/PRIVACY.md` and `https://joraj2.github.io/edgebook/app-ads.txt` resolve |
+| 1.4 | **Me** | Verify `https://joraj2.github.io/traderecap/PRIVACY.md` and `https://joraj2.github.io/traderecap/app-ads.txt` resolve |
 | 1.5 | **Me** | Reply with the live URLs you'll paste into Play Console |
 
 **Outcome:** repo public, privacy policy + app-ads.txt hosted at stable URLs.
@@ -141,7 +141,7 @@ Detail: [BUILD_INSTRUCTIONS.md §5–6](BUILD_INSTRUCTIONS.md#5-generate-a-signi
 |---|---|---|
 | 8.1 | **You** | Pay $25 USD one-time at https://play.google.com/console + identity verification (passport/driver license) |
 | 8.2 | **You** | Create app: name "TradeRecap", default language en-US, App, Free, declarations all ticked |
-| 8.3 | **You** | Dashboard → complete every section: privacy policy URL (`https://joraj2.github.io/edgebook/PRIVACY.md`), App access, Ads = Yes, Content rating, Target audience 18+, News No, COVID No, Data safety form (paste from [PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md#data-safety-form)), Government No, Financial features No |
+| 8.3 | **You** | Dashboard → complete every section: privacy policy URL (`https://joraj2.github.io/traderecap/PRIVACY.md`), App access, Ads = Yes, Content rating, Target audience 18+, News No, COVID No, Data safety form (paste from [PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md#data-safety-form)), Government No, Financial features No |
 | 8.4 | **You** | Store listing: paste short + long description from [PLAY_STORE_LISTING.md](PLAY_STORE_LISTING.md#full-description-max-4000-chars), upload icon + feature graphic + 8 screenshots |
 | 8.5 | **You** | Pricing & distribution: Free, Contains ads = Yes, NZ + AU + US + UK + CA initially |
 
