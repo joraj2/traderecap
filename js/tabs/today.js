@@ -58,6 +58,28 @@ window.Tabs.today = (function () {
         ${StatCard.render({ label: 'Avg R', value: Compute.fmtNum(t.avgR), info: 'Average R-multiple per trade' })}
       </div>
 
+      ${(() => {
+        const ins = Compute.insights(trades);
+        if (!ins.length) return '';
+        return `
+          <div class="card" style="margin-top:12px;">
+            <div class="card-title-row">
+              <span class="dot"></span>
+              <h3 class="card-title">Insights</h3>
+              <span class="text-dim" style="margin-left:auto; font-size: 11px;">Auto-generated from your trade data</span>
+            </div>
+            <div class="insights-list">
+              ${ins.map(i => `
+                <div class="insight ${i.tone || ''}">
+                  <div class="insight-label">${esc(i.label)}</div>
+                  <div class="insight-value text-2">${esc(i.value)}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      })()}
+
       <details class="t-extra-stats" id="t-extra-stats">
         <summary><span class="text-2" style="font-size:12px;">Show extended stats</span></summary>
         <div class="stat-grid stat-grid-4" style="margin-top:8px;">

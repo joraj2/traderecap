@@ -10,13 +10,14 @@
     { id: 'review',    label: 'Review',      icon: 'rotate-ccw' },
     { id: 'mistakes',  label: 'Mistakes',    icon: 'octagon-alert' },
     { id: 'macro',     label: 'Macro',       icon: 'globe' },
+    { id: 'notes',     label: 'Journal',     icon: 'notebook-pen' },
     { id: 'help',      label: 'Help',        icon: 'help-circle' }
   ];
 
   const PAGE_TITLES = {
     today: 'Dashboard', calendar: 'Calendar', trades: 'Trades', analytics: 'Analytics',
     watchlist: 'Watchlist', patterns: 'Patterns', premarket: 'Pre-market Plan',
-    review: 'Review', mistakes: 'Mistakes', macro: 'Macro Notes', help: 'Help & FAQ'
+    review: 'Review', mistakes: 'Mistakes', macro: 'Macro Notes', notes: 'Journal', help: 'Help & FAQ'
   };
 
   let currentTab = null;

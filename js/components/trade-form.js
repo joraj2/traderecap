@@ -117,6 +117,14 @@ window.TradeForm = (function () {
           <input type="number" name="target" step="any" value="${t.target ?? ''}" />
         </div>
         <div class="field">
+          <label title="Maximum Adverse Excursion — worst price reached against you during the trade">MAE <span class="text-dim">(worst price)</span></label>
+          <input type="number" name="mae" step="any" value="${t.mae ?? ''}" placeholder="Worst price hit" />
+        </div>
+        <div class="field">
+          <label title="Maximum Favourable Excursion — best price reached in your favour">MFE <span class="text-dim">(best price)</span></label>
+          <input type="number" name="mfe" step="any" value="${t.mfe ?? ''}" placeholder="Best price hit" />
+        </div>
+        <div class="field">
           <label>Catalyst</label>
           <select name="catalyst">
             <option value="">—</option>
@@ -305,6 +313,8 @@ window.TradeForm = (function () {
         size: num(data.size),
         stop_loss: num(data.stop_loss, true),
         target: num(data.target, true),
+        mae: num(data.mae, true),
+        mfe: num(data.mfe, true),
         fees: num(data.fees, true) || 0,
         setup: data.setup || '',
         pattern_id: data.pattern_id || null,
@@ -368,7 +378,7 @@ window.TradeForm = (function () {
       id: null, date: Compute.todayISO(), asset_class: 'stock', symbol: '',
       side: 'long', style: 'day', entry_time: Compute.nowTime(), exit_time: null,
       entry_price: null, exit_price: null, size: null,
-      stop_loss: null, target: null, fees: 0,
+      stop_loss: null, target: null, mae: null, mfe: null, fees: 0,
       setup: '', pattern_id: null, thesis: '', conviction: 3, catalyst: null,
       emotions: [], mistakes: [], lesson: '', screenshots: [],
       asset_specific: {}

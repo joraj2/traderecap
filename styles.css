@@ -203,6 +203,23 @@ a { color: inherit; text-decoration: none; }
 .card-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
 .card .dot { width: 8px; height: 8px; border-radius: 999px; background: var(--green); box-shadow: 0 0 8px var(--green); }
 
+/* ===== Smart insights ===== */
+.insights-list { display: grid; gap: 10px; grid-template-columns: repeat(2, 1fr); }
+.insight {
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.insight.pos { border-left-color: var(--green); background: linear-gradient(180deg, rgba(22,163,74,0.04), transparent 60%), var(--surface-2); }
+.insight.neg { border-left-color: var(--red); background: linear-gradient(180deg, rgba(220,38,38,0.04), transparent 60%), var(--surface-2); }
+.insight-label { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.insight-value { font-size: 12px; line-height: 1.4; }
+@media (max-width: 700px) {
+  .insights-list { grid-template-columns: 1fr; }
+}
+
 /* ===== Collapsible "extended stats" disclosure ===== */
 .t-extra-stats summary {
   cursor: pointer;

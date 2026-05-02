@@ -171,11 +171,121 @@ window.Compute = (function () {
   function startOfMonth(iso) { return iso.slice(0, 7) + '-01'; }
   function startOfYear(iso) { return iso.slice(0, 4) + '-01-01'; }
 
+  // Auto-generated plain-English observations from trade data.
+  // Returns up to 4 insights with the highest signal. Empty if < 5 trades.
+  function insights(trades) {
+    if (!trades || trades.length < 5) return [];
+    const out = [];
+    const dow = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+    // 1. Best day of week (by win rate, min 3 trades on that day)
+    const byDayOfWeek = {};
+    trades.forEach(t => {
+      if (!t.date) return;
+      const d = new Date(t.date + 'T00:00:00').getDay();
+      if (!byDayOfWeek[d]) byDayOfWeek[d] = { count: 0, wins: 0, pnl: 0 };
+      const p = pnl(t);
+      byDayOfWeek[d].count++;
+      byDayOfWeek[d].pnl += p;
+      if (p > 0) byDayOfWeek[d].wins++;
+    });
+    let bestDay = null, worstDay = null;
+    for (const d in byDayOfWeek) {
+      const s = byDayOfWeek[d];
+      if (s.count < 3) continue;
+      s.winRate = s.wins / s.count;
+      if (!bestDay || s.winRate > bestDay.winRate) bestDay = Object.assign({ day: dow[d] }, s);
+      if (!worstDay || s.winRate < worstDay.winRate) worstDay = Object.assign({ day: dow[d] }, s);
+    }
+    if (bestDay && bestDay.winRate > 0.5) {
+      out.push({
+        label: `${bestDay.day}s are your best day`,
+        value: `${Math.round(bestDay.winRate * 100)}% win rate over ${bestDay.count} trades · ${fmtMoney(bestDay.pnl)}`,
+        tone: 'pos'
+      });
+    }
+    if (worstDay && worstDay.winRate < 0.4 && worstDay.day !== (bestDay && bestDay.day)) {
+      out.push({
+        label: `${worstDay.day}s are tough`,
+        value: `${Math.round(worstDay.winRate * 100)}% win rate over ${worstDay.count} trades · ${fmtMoney(worstDay.pnl)}`,
+        tone: 'neg'
+      });
+    }
+
+    // 2. Best setup by total net P&L (min 3 trades)
+    const bySetup = {};
+    trades.forEach(t => {
+      if (!t.setup) return;
+      if (!bySetup[t.setup]) bySetup[t.setup] = { count: 0, pnl: 0 };
+      bySetup[t.setup].count++;
+      bySetup[t.setup].pnl += pnl(t);
+    });
+    const setups = Object.entries(bySetup).filter(([, v]) => v.count >= 3).sort((a, b) => b[1].pnl - a[1].pnl);
+    if (setups.length) {
+      const [name, s] = setups[0];
+      if (s.pnl > 0) {
+        out.push({
+          label: `Your edge: ${name.replace(/_/g, ' ')}`,
+          value: `${fmtMoney(s.pnl)} over ${s.count} trades`,
+          tone: 'pos'
+        });
+      }
+      if (setups.length > 1) {
+        const [worstName, worstS] = setups[setups.length - 1];
+        if (worstS.pnl < 0) {
+          out.push({
+            label: `Cut: ${worstName.replace(/_/g, ' ')}`,
+            value: `${fmtMoney(worstS.pnl)} bleed over ${worstS.count} trades`,
+            tone: 'neg'
+          });
+        }
+      }
+    }
+
+    // 3. Costliest mistake (min 2 occurrences)
+    const byMistake = {};
+    trades.forEach(t => {
+      (t.mistakes || []).forEach(m => {
+        if (!byMistake[m]) byMistake[m] = { count: 0, pnl: 0 };
+        byMistake[m].count++;
+        byMistake[m].pnl += pnl(t);
+      });
+    });
+    const mistakes = Object.entries(byMistake).filter(([, v]) => v.count >= 2).sort((a, b) => a[1].pnl - b[1].pnl);
+    if (mistakes.length && mistakes[0][1].pnl < 0) {
+      const [name, s] = mistakes[0];
+      out.push({
+        label: `Costliest mistake: "${name.replace(/_/g, ' ')}"`,
+        value: `${fmtMoney(s.pnl)} across ${s.count} flagged trades`,
+        tone: 'neg'
+      });
+    }
+
+    // 4. Recent form vs all-time (last 10 trades)
+    if (trades.length >= 15) {
+      const sorted = trades.slice().sort((a, b) => (a.date + (a.entry_time || '')).localeCompare(b.date + (b.entry_time || '')));
+      const recent = sorted.slice(-10);
+      const recentWR = recent.filter(t => pnl(t) > 0).length / recent.length;
+      const allWR = trades.filter(t => pnl(t) > 0).length / trades.length;
+      const delta = recentWR - allWR;
+      if (Math.abs(delta) >= 0.10) {
+        out.push({
+          label: delta > 0 ? 'Form is improving' : 'Recent form has slipped',
+          value: `Last 10: ${Math.round(recentWR * 100)}% WR · all-time: ${Math.round(allWR * 100)}%`,
+          tone: delta > 0 ? 'pos' : 'neg'
+        });
+      }
+    }
+
+    return out.slice(0, 4);
+  }
+
   return {
     pnl, isWin, isLoss, rMultiple, computeGross,
     totals, equityCurve, maxDrawdown, sharpeRatio, streaks,
     byDay, groupBy, tradesInRange, tradesForDate,
     fmtMoney, fmtMoneyShort, fmtPct, fmtNum, todayISO, nowTime, dateLong,
-    startOfWeek, startOfMonth, startOfYear
+    startOfWeek, startOfMonth, startOfYear,
+    insights
   };
 })();
