@@ -73,18 +73,23 @@ window.Ads = (function () {
       return;
     }
 
+    // Capacitor 6 auto-registers native plugins on window.Capacitor.Plugins.
+    // We are a vanilla-JS app (no bundler), so a dynamic ES import of
+    // '@capacitor-community/admob' would fail at runtime — there is no
+    // node_modules on the device. Read the global instead.
+    admob = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.AdMob;
+    if (!admob) {
+      console.warn('[Ads] AdMob plugin not found on Capacitor.Plugins — running without ads.');
+      return;
+    }
     try {
-      // Capacitor AdMob plugin (community).
-      // npm: @capacitor-community/admob
-      const mod = await import('@capacitor-community/admob');
-      admob = mod.AdMob;
       await admob.initialize({
         requestTrackingAuthorization: true,
         testingDevices: [],
         initializeForTesting: useTestAds
       });
       initialized = true;
-      console.info('[Ads] AdMob initialized.');
+      console.info('[Ads] AdMob initialized.', { useTestAds });
       preloadInterstitial();
     } catch (e) {
       console.warn('[Ads] AdMob init failed — running without ads.', e);
