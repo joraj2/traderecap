@@ -97,7 +97,7 @@ window.TradeRow = (function () {
   }
 
   function assetClassChip(ac) {
-    const map = { stock: 'STK', option: 'OPT', future: 'FUT', crypto: 'CRY' };
+    const map = { stock: 'STK', option: 'OPT', future: 'FUT', crypto: 'CRY', forex: 'FX' };
     return `<span class="chip">${map[ac] || ac || '–'}</span>`;
   }
 

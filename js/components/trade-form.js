@@ -1,10 +1,40 @@
 window.TradeForm = (function () {
+  // Built-in suggestions, by asset class. Combined with the user's own history
+  // (extracted from Store.get('trades')) into a single deduped datalist.
+  const COMMON_SYMBOLS = {
+    stock:  ['SPY', 'QQQ', 'IWM', 'DIA', 'AAPL', 'MSFT', 'NVDA', 'TSLA', 'GOOGL', 'META', 'AMZN', 'AMD', 'NFLX', 'COIN', 'PLTR'],
+    future: ['ES', 'NQ', 'YM', 'RTY', 'MES', 'MNQ', 'GC', 'SI', 'CL', 'NG', 'ZB', 'ZN', 'ZC', 'ZW'],
+    crypto: ['BTCUSD', 'ETHUSD', 'SOLUSD', 'BNBUSD', 'XRPUSD', 'DOGEUSD', 'ADAUSD'],
+    forex:  ['EURUSD', 'GBPUSD', 'USDJPY', 'AUDUSD', 'NZDUSD', 'USDCAD', 'USDCHF', 'XAUUSD', 'XAGUSD'],
+    option: []
+  };
+
+  function symbolSuggestions(currentClass) {
+    const trades = Store.get('trades') || [];
+    const seen = new Set();
+    const list = [];
+    // 1. User's own history first (most recent first)
+    for (let i = trades.length - 1; i >= 0; i--) {
+      const s = (trades[i].symbol || '').toUpperCase();
+      if (s && !seen.has(s)) { seen.add(s); list.push(s); }
+    }
+    // 2. Built-ins for the active asset class, then everything else
+    const order = [currentClass, 'stock', 'future', 'crypto', 'forex'];
+    for (const ac of order) {
+      for (const s of (COMMON_SYMBOLS[ac] || [])) {
+        if (!seen.has(s)) { seen.add(s); list.push(s); }
+      }
+    }
+    return list;
+  }
+
   function open(existing) {
     const isEdit = !!existing;
     const t = existing ? JSON.parse(JSON.stringify(existing)) : freshTrade();
     const tags = Store.get('tags') || {};
     const patterns = Store.get('patterns') || [];
     const mistakes = Store.get('mistakes') || [];
+    const symbolList = symbolSuggestions(t.asset_class);
 
     const form = document.createElement('form');
     form.id = 'trade-form';
@@ -16,7 +46,10 @@ window.TradeForm = (function () {
         </div>
         <div class="field">
           <label>Symbol</label>
-          <input name="symbol" placeholder="AAPL / ES / BTC" value="${esc(t.symbol)}" required />
+          <input list="symbol-list" name="symbol" placeholder="Start typing — AAPL, ES, BTC..." value="${esc(t.symbol)}" autocomplete="off" required />
+          <datalist id="symbol-list">
+            ${symbolList.map(s => `<option value="${esc(s)}">`).join('')}
+          </datalist>
         </div>
         <div class="field">
           <label>Asset Class</label>
@@ -24,6 +57,7 @@ window.TradeForm = (function () {
             ${opt('stock', 'Stock', t.asset_class)}
             ${opt('option', 'Option', t.asset_class)}
             ${opt('future', 'Future', t.asset_class)}
+            ${opt('forex', 'Forex / Metal', t.asset_class)}
             ${opt('crypto', 'Crypto', t.asset_class)}
           </select>
         </div>

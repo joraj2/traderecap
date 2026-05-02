@@ -868,6 +868,8 @@ a { color: inherit; text-decoration: none; }
   /* Help hero on phone */
   .help-hero { padding: 14px; }
 
+  /* Today: hide side-cards on phones (Watchlist + Market Note have their own tabs) */
+  .t-side-cards { display: none; }
   /* Today: extended stats kept collapsed by default */
   .t-extra-stats summary {
     cursor: pointer;

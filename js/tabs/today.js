@@ -111,7 +111,7 @@ window.Tabs.today = (function () {
           ` : `<div class="empty"><div class="emoji">🎯</div><h3>No trades logged today</h3><div>Click <strong>+ Add Trade</strong> to log one.</div></div>`}
         </div>
 
-        <div>
+        <div class="t-side-cards">
           <div class="card">
             <div class="card-title-row">
               <span class="dot"></span>

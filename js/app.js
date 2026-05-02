@@ -40,10 +40,14 @@
       try { await Ads.init({ useTestAds: true }); } catch (e) { console.warn(e); }
     }
 
-    // Re-render current tab on data changes
+    // Re-render current tab on data changes — preserve scroll so the page
+    // doesn't jump to top after a trade is added.
     Store.subscribe(() => {
       const c = document.getElementById('content');
+      const sy = window.scrollY || document.documentElement.scrollTop || 0;
       if (currentTab && Tabs[currentTab]) Tabs[currentTab].render(c);
+      // Restore on next frame so layout settles first
+      requestAnimationFrame(() => window.scrollTo({ top: sy, behavior: 'instant' }));
       updateMiniPnL();
     });
 

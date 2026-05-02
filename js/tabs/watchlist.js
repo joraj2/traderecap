@@ -96,7 +96,7 @@ window.Tabs.watchlist = (function () {
         <div class="field"><label>Symbol</label><input name="symbol" value="${esc(w.symbol)}" required /></div>
         <div class="field"><label>Asset Class</label>
           <select name="asset_class">
-            ${['stock','option','future','crypto'].map(a => `<option ${(w.asset_class || 'stock') === a ? 'selected' : ''}>${a}</option>`).join('')}
+            ${['stock','option','future','forex','crypto'].map(a => `<option ${(w.asset_class || 'stock') === a ? 'selected' : ''}>${a}</option>`).join('')}
           </select>
         </div>
         <div class="field"><label>Side</label>
