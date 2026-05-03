@@ -14,7 +14,7 @@
     "SplashScreen": {
       "launchShowDuration": 1200,
       "launchAutoHide": true,
-      "backgroundColor": "#f6f7f9",
+      "backgroundColor": "#0a0a12",
       "androidSplashResourceName": "splash",
       "androidScaleType": "CENTER_CROP",
       "showSpinner": false,
@@ -22,8 +22,8 @@
       "splashImmersive": true
     },
     "StatusBar": {
-      "style": "LIGHT",
-      "backgroundColor": "#f6f7f9",
+      "style": "DARK",
+      "backgroundColor": "#0a0a12",
       "overlaysWebView": false
     },
     "AdMob": {

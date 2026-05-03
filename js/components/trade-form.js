@@ -9,6 +9,19 @@ window.TradeForm = (function () {
     option: []
   };
 
+  // Last N unique symbols the user has logged, most recent first.
+  // Empty if the user has no trade history yet.
+  function recentSymbols(n) {
+    const trades = Store.get('trades') || [];
+    const seen = new Set();
+    const out = [];
+    for (let i = trades.length - 1; i >= 0 && out.length < n; i--) {
+      const s = (trades[i].symbol || '').toUpperCase();
+      if (s && !seen.has(s)) { seen.add(s); out.push(s); }
+    }
+    return out;
+  }
+
   function symbolSuggestions(currentClass) {
     const trades = Store.get('trades') || [];
     const seen = new Set();
@@ -36,152 +49,170 @@ window.TradeForm = (function () {
     const mistakes = Store.get('mistakes') || [];
     const symbolList = symbolSuggestions(t.asset_class);
 
+    const recentSyms = recentSymbols(5);
+
     const form = document.createElement('form');
     form.id = 'trade-form';
     form.innerHTML = `
-      <div class="form-grid cols-3">
-        <div class="field">
-          <label>Date</label>
-          <input type="date" name="date" value="${t.date || Compute.todayISO()}" required />
-        </div>
-        <div class="field">
-          <label>Symbol</label>
-          <input list="symbol-list" name="symbol" placeholder="Start typing — AAPL, ES, BTC..." value="${esc(t.symbol)}" autocomplete="off" required />
-          <datalist id="symbol-list">
-            ${symbolList.map(s => `<option value="${esc(s)}">`).join('')}
-          </datalist>
-        </div>
-        <div class="field">
-          <label>Asset Class</label>
-          <select name="asset_class" id="asset-class">
-            ${opt('stock', 'Stock', t.asset_class)}
-            ${opt('option', 'Option', t.asset_class)}
-            ${opt('future', 'Future', t.asset_class)}
-            ${opt('forex', 'Forex / Metal', t.asset_class)}
-            ${opt('crypto', 'Crypto', t.asset_class)}
-          </select>
-        </div>
+      <div class="tab-strip" role="tablist">
+        <button type="button" class="tab-btn active" data-tab="general" role="tab">General</button>
+        <button type="button" class="tab-btn" data-tab="orders" role="tab">Orders</button>
+        <button type="button" class="tab-btn" data-tab="journal" role="tab">Journal</button>
+      </div>
 
-        <div class="field">
-          <label>Side</label>
-          <select name="side">
-            ${opt('long', 'Long', t.side || 'long')}
-            ${opt('short', 'Short', t.side)}
-          </select>
-        </div>
-        <div class="field">
-          <label>Style</label>
-          <select name="style">
-            ${opt('day', 'Day', t.style || 'day')}
-            ${opt('swing', 'Swing', t.style)}
-            ${opt('position', 'Position', t.style)}
-          </select>
-        </div>
-        <div class="field">
-          <label>Conviction (1-5)</label>
-          <input type="number" name="conviction" min="1" max="5" value="${t.conviction || 3}" />
-        </div>
-
-        <div class="field">
-          <label>Stop Loss</label>
-          <input type="number" name="stop_loss" step="any" value="${t.stop_loss ?? ''}" />
-        </div>
-        <div class="field">
-          <label>Target</label>
-          <input type="number" name="target" step="any" value="${t.target ?? ''}" />
-        </div>
-        <div class="field">
-          <label>Fees ($)</label>
-          <input type="number" name="fees" step="any" value="${t.fees ?? 0}" />
-        </div>
-
-        <div class="field">
-          <label title="Maximum Adverse Excursion — worst price reached against you during the trade">MAE <span class="text-dim">(Worst Price)</span></label>
-          <input type="number" name="mae" step="any" value="${t.mae ?? ''}" placeholder="Worst price hit" />
-        </div>
-        <div class="field">
-          <label title="Maximum Favourable Excursion — best price reached in your favour">MFE <span class="text-dim">(Best Price)</span></label>
-          <input type="number" name="mfe" step="any" value="${t.mfe ?? ''}" placeholder="Best price hit" />
-        </div>
-        <div class="field">
-          <label>Catalyst</label>
-          <select name="catalyst">
-            <option value="">—</option>
-            ${(tags.catalysts || []).map(c => opt(c, c, t.catalyst)).join('')}
-          </select>
+      <div class="tab-pane active" data-pane="general">
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>Date</label>
+            <input type="date" name="date" value="${t.date || Compute.todayISO()}" required />
+          </div>
+          <div class="field">
+            <label>Asset Class</label>
+            <select name="asset_class" id="asset-class">
+              ${opt('stock', 'Stock', t.asset_class)}
+              ${opt('option', 'Option', t.asset_class)}
+              ${opt('future', 'Future', t.asset_class)}
+              ${opt('forex', 'Forex / Metal', t.asset_class)}
+              ${opt('crypto', 'Crypto', t.asset_class)}
+            </select>
+          </div>
+          <div class="field full">
+            <label>Symbol</label>
+            ${recentSyms.length ? `
+              <div class="recent-symbols" id="recent-symbols">
+                ${recentSyms.map(s => `<button type="button" class="recent-chip" data-sym="${esc(s)}">${esc(s)}</button>`).join('')}
+              </div>
+            ` : ''}
+            <input list="symbol-list" name="symbol" placeholder="Start typing — AAPL, ES, BTC..." value="${esc(t.symbol)}" autocomplete="off" required />
+            <datalist id="symbol-list">
+              ${symbolList.map(s => `<option value="${esc(s)}">`).join('')}
+            </datalist>
+          </div>
+          <div class="field">
+            <label>Side</label>
+            <div class="seg-toggle" data-name="side">
+              <button type="button" class="seg ${(t.side || 'long') === 'long' ? 'active long' : ''}" data-val="long">Buy (Long)</button>
+              <button type="button" class="seg ${t.side === 'short' ? 'active short' : ''}" data-val="short">Sell (Short)</button>
+              <input type="hidden" name="side" value="${t.side || 'long'}" />
+            </div>
+          </div>
+          <div class="field">
+            <label>Style</label>
+            <select name="style">
+              ${opt('day', 'Day', t.style || 'day')}
+              ${opt('swing', 'Swing', t.style)}
+              ${opt('position', 'Position', t.style)}
+            </select>
+          </div>
+          <div class="field full">
+            <label>Conviction <span class="text-dim conviction-val">${t.conviction || 3} / 5</span></label>
+            <input type="range" name="conviction" min="1" max="5" value="${t.conviction || 3}" class="range-slider" />
+          </div>
         </div>
       </div>
 
-      <div class="divider"></div>
-
-      <div class="fills-section">
-        <div class="fills-head">
-          <div class="section-title" style="margin: 0;"><i data-lucide="log-in" style="width:14px; height:14px; vertical-align: -2px;"></i> Entries</div>
-          <button type="button" class="btn btn-sm" id="add-entry"><i data-lucide="plus"></i> Add Entry</button>
-        </div>
-        <div class="fills-list" id="entries-list"></div>
-      </div>
-
-      <div class="fills-section" style="margin-top: 16px;">
-        <div class="fills-head">
-          <div class="section-title" style="margin: 0;"><i data-lucide="log-out" style="width:14px; height:14px; vertical-align: -2px;"></i> Exits</div>
-          <button type="button" class="btn btn-sm" id="add-exit"><i data-lucide="plus"></i> Add Exit</button>
-        </div>
-        <div class="fills-list" id="exits-list"></div>
-      </div>
-
-      <div class="fills-summary" id="fills-summary"></div>
-
-      <div id="asset-specific" style="margin-top: 12px;"></div>
-
-      <div class="divider"></div>
-
-      <div class="form-grid">
-        <div class="field full">
-          <label>Setup</label>
-          <input list="setup-list" name="setup" value="${esc(t.setup)}" placeholder="vwap_reclaim / orb / etc." />
-          <datalist id="setup-list">
-            ${(tags.setups || []).map(s => `<option value="${esc(s)}">`).join('')}
-          </datalist>
+      <div class="tab-pane" data-pane="orders">
+        <div class="fills-section">
+          <div class="fills-head">
+            <div class="section-title" style="margin: 0;"><i data-lucide="log-in" style="width:14px; height:14px; vertical-align: -2px;"></i> Entries</div>
+            <button type="button" class="btn btn-sm" id="add-entry"><i data-lucide="plus"></i> Add Entry</button>
+          </div>
+          <div class="fills-list" id="entries-list"></div>
         </div>
 
-        <div class="field full">
-          <label>Pattern (Link to Playbook)</label>
-          <select name="pattern_id">
-            <option value="">—</option>
-            ${patterns.map(p => `<option value="${esc(p.id)}" ${t.pattern_id === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
-          </select>
+        <div class="fills-section" style="margin-top: 16px;">
+          <div class="fills-head">
+            <div class="section-title" style="margin: 0;"><i data-lucide="log-out" style="width:14px; height:14px; vertical-align: -2px;"></i> Exits</div>
+            <button type="button" class="btn btn-sm" id="add-exit"><i data-lucide="plus"></i> Add Exit</button>
+          </div>
+          <div class="fills-list" id="exits-list"></div>
         </div>
 
-        <div class="field full">
-          <label>Thesis (Why I Took This)</label>
-          <textarea name="thesis" placeholder="What's the edge? What invalidates it?">${esc(t.thesis)}</textarea>
-        </div>
+        <div class="fills-summary" id="fills-summary"></div>
 
-        <div class="field full">
-          <label>Emotions</label>
-          <div class="chip-picker" data-multi="emotions">
-            ${(tags.emotions || []).map(e => chip(e, e, (t.emotions || []).includes(e))).join('')}
+        <div class="divider"></div>
+
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>Stop Loss</label>
+            <input type="number" name="stop_loss" step="any" value="${t.stop_loss ?? ''}" />
+          </div>
+          <div class="field">
+            <label>Target</label>
+            <input type="number" name="target" step="any" value="${t.target ?? ''}" />
+          </div>
+          <div class="field">
+            <label>Fees ($)</label>
+            <input type="number" name="fees" step="any" value="${t.fees ?? 0}" />
+          </div>
+          <div class="field">
+            <label>Catalyst</label>
+            <select name="catalyst">
+              <option value="">—</option>
+              ${(tags.catalysts || []).map(c => opt(c, c, t.catalyst)).join('')}
+            </select>
+          </div>
+          <div class="field">
+            <label title="Maximum Adverse Excursion — worst price reached against you during the trade">MAE <span class="text-dim">(Worst Price)</span></label>
+            <input type="number" name="mae" step="any" value="${t.mae ?? ''}" placeholder="Worst price hit" />
+          </div>
+          <div class="field">
+            <label title="Maximum Favourable Excursion — best price reached in your favour">MFE <span class="text-dim">(Best Price)</span></label>
+            <input type="number" name="mfe" step="any" value="${t.mfe ?? ''}" placeholder="Best price hit" />
           </div>
         </div>
 
-        <div class="field full">
-          <label>Mistakes</label>
-          <div class="chip-picker" data-multi="mistakes" data-red="true">
-            ${mistakes.map(m => chip(m.id, m.label, (t.mistakes || []).includes(m.id), true)).join('')}
+        <div id="asset-specific" style="margin-top: 12px;"></div>
+      </div>
+
+      <div class="tab-pane" data-pane="journal">
+        <div class="form-grid">
+          <div class="field full">
+            <label>Setup</label>
+            <input list="setup-list" name="setup" value="${esc(t.setup)}" placeholder="vwap_reclaim / orb / etc." />
+            <datalist id="setup-list">
+              ${(tags.setups || []).map(s => `<option value="${esc(s)}">`).join('')}
+            </datalist>
           </div>
-        </div>
 
-        <div class="field full">
-          <label>Lesson / What to Do Differently</label>
-          <textarea name="lesson" placeholder="Key takeaway from this trade...">${esc(t.lesson)}</textarea>
-        </div>
+          <div class="field full">
+            <label>Pattern (Link to Playbook)</label>
+            <select name="pattern_id">
+              <option value="">—</option>
+              ${patterns.map(p => `<option value="${esc(p.id)}" ${t.pattern_id === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
+            </select>
+          </div>
 
-        <div class="field full">
-          <label>Screenshots</label>
-          <div class="dropzone" id="dropzone">Drop chart images here, or click to select. Stored locally as data URLs.</div>
-          <input type="file" id="file-input" accept="image/*" multiple style="display:none" />
-          <div class="thumbs" id="thumbs"></div>
+          <div class="field full">
+            <label>Thesis (Why I Took This)</label>
+            <textarea name="thesis" placeholder="What's the edge? What invalidates it?">${esc(t.thesis)}</textarea>
+          </div>
+
+          <div class="field full">
+            <label>Emotions</label>
+            <div class="chip-picker" data-multi="emotions">
+              ${(tags.emotions || []).map(e => chip(e, e, (t.emotions || []).includes(e))).join('')}
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>Mistakes</label>
+            <div class="chip-picker" data-multi="mistakes" data-red="true">
+              ${mistakes.map(m => chip(m.id, m.label, (t.mistakes || []).includes(m.id), true)).join('')}
+            </div>
+          </div>
+
+          <div class="field full">
+            <label>Lesson / What to Do Differently</label>
+            <textarea name="lesson" placeholder="Key takeaway from this trade...">${esc(t.lesson)}</textarea>
+          </div>
+
+          <div class="field full">
+            <label>Screenshots</label>
+            <div class="dropzone" id="dropzone">Drop chart images here, or click to select. Stored locally as data URLs.</div>
+            <input type="file" id="file-input" accept="image/*" multiple style="display:none" />
+            <div class="thumbs" id="thumbs"></div>
+          </div>
         </div>
       </div>
     `;
@@ -270,7 +301,45 @@ window.TradeForm = (function () {
       state.exits.push({ price: '', size: '', time: Compute.nowTime() });
       renderFills();
     });
-    form.querySelector('[name="side"]').addEventListener('change', renderSummary);
+    // Tab switching
+    form.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = btn.dataset.tab;
+        form.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+        form.querySelectorAll('.tab-pane').forEach(p => p.classList.toggle('active', p.dataset.pane === target));
+      });
+    });
+
+    // Side seg-toggle (Buy/Sell pills) — sync to hidden input
+    const sideHidden = form.querySelector('input[type="hidden"][name="side"]');
+    form.querySelectorAll('.seg-toggle .seg').forEach(s => {
+      s.addEventListener('click', () => {
+        const v = s.dataset.val;
+        sideHidden.value = v;
+        s.closest('.seg-toggle').querySelectorAll('.seg').forEach(x => {
+          x.classList.toggle('active', x === s);
+          x.classList.toggle('long', x === s && v === 'long');
+          x.classList.toggle('short', x === s && v === 'short');
+        });
+        renderSummary();
+      });
+    });
+
+    // Conviction slider — live label
+    const convInp = form.querySelector('input[name="conviction"]');
+    const convVal = form.querySelector('.conviction-val');
+    if (convInp && convVal) {
+      convInp.addEventListener('input', () => { convVal.textContent = `${convInp.value} / 5`; });
+    }
+
+    // Recent symbol chips — autofill symbol input on tap
+    form.querySelectorAll('.recent-chip').forEach(c => {
+      c.addEventListener('click', () => {
+        const inp = form.querySelector('input[name="symbol"]');
+        if (inp) { inp.value = c.dataset.sym; inp.dispatchEvent(new Event('input', { bubbles: true })); }
+      });
+    });
+
     form.querySelector('#asset-class').addEventListener('change', renderSummary);
     const thumbs = form.querySelector('#thumbs');
     function renderThumbs() {

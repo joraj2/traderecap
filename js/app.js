@@ -89,18 +89,27 @@
     const bn = document.getElementById('bottom-nav');
     if (!bn) return;
     const primary = NAV.filter(n => n.primary);
-    bn.innerHTML = primary.map(n => `
-      <a href="#${n.id}" class="bn-item" data-tab="${n.id}">
-        <i data-lucide="${n.icon}"></i>
-        <span>${n.label}</span>
-      </a>
-    `).join('') + `
-      <button class="bn-item bn-more" id="bn-more">
-        <i data-lucide="more-horizontal"></i>
-        <span>More</span>
+    // UltraTrader-style: 2 tabs / center + button / 2 tabs.
+    // Falls back to all-tabs-then-More if there are fewer than 4 primaries.
+    const left = primary.slice(0, 2);
+    const right = primary.slice(2, 4);
+    bn.innerHTML = `
+      ${left.map(n => `
+        <a href="#${n.id}" class="bn-item" data-tab="${n.id}">
+          <i data-lucide="${n.icon}"></i>
+          <span>${n.label}</span>
+        </a>
+      `).join('')}
+      <button class="bn-item bn-fab" id="bn-add" aria-label="Add Trade">
+        <i data-lucide="plus"></i>
       </button>
+      ${right.map(n => `
+        <a href="#${n.id}" class="bn-item" data-tab="${n.id}">
+          <i data-lucide="${n.icon}"></i>
+          <span>${n.label}</span>
+        </a>
+      `).join('')}
     `;
-    document.getElementById('bn-more').addEventListener('click', openMoreSheet);
     if (window.lucide) lucide.createIcons();
   }
 
@@ -164,9 +173,33 @@
   }
 
   function wireFab() {
-    const fab = document.getElementById('fab-add-trade');
-    if (!fab) return;
-    fab.addEventListener('click', () => TradeForm.open());
+    // Wire both the floating FAB (web/desktop fallback) and the centered
+    // bottom-nav + button (mobile primary). Tap = Quick Log; long-press = full form.
+    ['fab-add-trade', 'bn-add'].forEach(id => {
+      const fab = document.getElementById(id);
+      if (!fab) return;
+      let pressTimer = null, longPressed = false;
+      fab.addEventListener('click', () => {
+        if (longPressed) { longPressed = false; return; }
+        if (window.QuickLog) QuickLog.open();
+        else TradeForm.open();
+      });
+      const startPress = () => {
+        longPressed = false;
+        pressTimer = setTimeout(() => {
+          longPressed = true;
+          if (navigator.vibrate) navigator.vibrate(20);
+          TradeForm.open();
+        }, 500);
+      };
+      const cancelPress = () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } };
+      fab.addEventListener('mousedown', startPress);
+      fab.addEventListener('touchstart', startPress, { passive: true });
+      fab.addEventListener('mouseup', cancelPress);
+      fab.addEventListener('mouseleave', cancelPress);
+      fab.addEventListener('touchend', cancelPress);
+      fab.addEventListener('touchcancel', cancelPress);
+    });
   }
 
   function openReport() {
