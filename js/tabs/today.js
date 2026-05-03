@@ -81,7 +81,7 @@ window.Tabs.today = (function () {
       })()}
 
       <details class="t-extra-stats" id="t-extra-stats">
-        <summary><span class="text-2" style="font-size:12px;">Show extended stats</span></summary>
+        <summary><span class="text-2" style="font-size:12px;">Show Extended Stats</span></summary>
         <div class="stat-grid stat-grid-4" style="margin-top:8px;">
           ${(() => {
             const curve = Compute.equityCurve(trades);
@@ -130,7 +130,7 @@ window.Tabs.today = (function () {
                 </tbody>
               </table>
             </div>
-          ` : `<div class="empty"><div class="emoji">🎯</div><h3>No trades logged today</h3><div>Click <strong>+ Add Trade</strong> to log one.</div></div>`}
+          ` : `<div class="empty"><div class="emoji">🎯</div><h3>No Trades Logged Today</h3><div>Click <strong>+ Add Trade</strong> to log one.</div></div>`}
         </div>
 
         <div class="t-side-cards">
@@ -138,7 +138,7 @@ window.Tabs.today = (function () {
             <div class="card-title-row">
               <span class="dot"></span>
               <h3 class="card-title">Watchlist</h3>
-              <a href="#watchlist" class="text-dim" style="margin-left:auto; font-size:11px;">View all →</a>
+              <a href="#watchlist" class="text-dim" style="margin-left:auto; font-size:11px;">View All →</a>
             </div>
             ${upcomingWatch.length ? upcomingWatch.map(w => `
               <div style="padding:8px 0; border-bottom: 1px solid var(--border); display:flex; align-items:center; gap:8px;">

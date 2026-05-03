@@ -22,25 +22,25 @@ window.Tabs.premarket = (function () {
             <div class="form-grid cols-2">
               <div class="field"><label>Bias</label>
                 <select id="pm-bias">
-                  ${['long','short','neutral','no_trade'].map(s => `<option ${plan.bias === s ? 'selected' : ''}>${s}</option>`).join('')}
+                  ${['long','short','neutral','no_trade'].map(s => `<option value="${s}" ${plan.bias === s ? 'selected' : ''}>${s.replace('_',' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`).join('')}
                 </select>
               </div>
               <div class="field"><label>Conviction (1-5)</label>
                 <input type="number" min="1" max="5" id="pm-conviction" value="${plan.conviction || 3}" />
               </div>
-              <div class="field full"><label>Levels (comma-separated)</label>
+              <div class="field full"><label>Levels (Comma-Separated)</label>
                 <input id="pm-levels" value="${esc((plan.levels || []).join(', '))}" placeholder="SPX 4502, NDX 15800, BTC 92500" />
               </div>
               <div class="field full"><label>Catalysts</label>
                 <input id="pm-catalysts" value="${esc((plan.catalysts || []).join(', '))}" placeholder="CPI 8:30, FOMC 14:00, NVDA earnings AH" />
               </div>
-              <div class="field full"><label>Watchlist (symbols)</label>
+              <div class="field full"><label>Watchlist (Symbols)</label>
                 <input id="pm-symbols" value="${esc((plan.symbols || []).join(', '))}" placeholder="AAPL, NVDA, ES, BTC" />
               </div>
               <div class="field full"><label>Plan / Notes</label>
                 <textarea id="pm-notes" rows="6" placeholder="What am I looking for? What do I do if X? What invalidates the bias?">${esc(plan.notes || '')}</textarea>
               </div>
-              <div class="field full"><label>Invalidation (what kills the bias)</label>
+              <div class="field full"><label>Invalidation (What Kills the Bias)</label>
                 <textarea id="pm-invalid" rows="3" placeholder="If SPX loses 4485 with conviction, scrap longs.">${esc(plan.invalidation || '')}</textarea>
               </div>
             </div>
@@ -85,7 +85,7 @@ window.Tabs.premarket = (function () {
       Toast.success(`Plan saved for ${editingDate}`);
     });
     host.querySelector('#pm-clear').addEventListener('click', async () => {
-      if (await Modal.confirm({ title: 'Clear plan', message: `Delete the plan for ${editingDate}?`, okText: 'Clear', danger: true })) {
+      if (await Modal.confirm({ title: 'Clear Plan', message: `Delete the plan for ${editingDate}?`, okText: 'Clear', danger: true })) {
         Store.update('premarket', obj => { delete obj[editingDate]; });
         render(host);
       }

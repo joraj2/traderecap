@@ -19,7 +19,7 @@ window.Tabs.watchlist = (function () {
       ${section('Traded', buckets.traded)}
       ${section('Expired', buckets.expired)}
 
-      ${items.length === 0 ? `<div class="empty"><div class="emoji">🎯</div><h3>No watch items yet</h3><div>Add setups you're stalking. We auto-expire stale ones based on your rule.</div></div>` : ''}
+      ${items.length === 0 ? `<div class="empty"><div class="emoji">🎯</div><h3>No Watch Items Yet</h3><div>Add setups you're stalking. We auto-expire stale ones based on your rule.</div></div>` : ''}
     `;
 
     if (window.lucide) lucide.createIcons();
@@ -42,7 +42,7 @@ window.Tabs.watchlist = (function () {
     }));
     host.querySelectorAll('[data-action="del-watch"]').forEach(b => b.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (await Modal.confirm({ title: 'Delete watch item', message: 'Remove this from the watchlist?', okText: 'Delete', danger: true })) {
+      if (await Modal.confirm({ title: 'Delete Watch Item', message: 'Remove this from the watchlist?', okText: 'Delete', danger: true })) {
         Store.update('watchlist', list => list.filter(x => x.id !== b.dataset.id));
       }
     }));
@@ -68,7 +68,7 @@ window.Tabs.watchlist = (function () {
                   <td class="text-dim">${w.expires || '—'}</td>
                   <td>
                     <select data-status-id="${w.id}">
-                      ${['watching','triggered','traded','expired'].map(s => `<option ${w.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+                      ${['watching','triggered','traded','expired'].map(s => `<option value="${s}" ${w.status === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
                     </select>
                   </td>
                   <td><button class="btn btn-icon btn-sm btn-danger" data-action="del-watch" data-id="${w.id}"><i data-lucide="trash-2"></i></button></td>
@@ -96,11 +96,11 @@ window.Tabs.watchlist = (function () {
         <div class="field"><label>Symbol</label><input name="symbol" value="${esc(w.symbol)}" required /></div>
         <div class="field"><label>Asset Class</label>
           <select name="asset_class">
-            ${['stock','option','future','forex','crypto'].map(a => `<option ${(w.asset_class || 'stock') === a ? 'selected' : ''}>${a}</option>`).join('')}
+            ${['stock','option','future','forex','crypto'].map(a => `<option value="${a}" ${(w.asset_class || 'stock') === a ? 'selected' : ''}>${a.charAt(0).toUpperCase() + a.slice(1)}</option>`).join('')}
           </select>
         </div>
         <div class="field"><label>Side</label>
-          <select name="side">${['long','short'].map(s => `<option ${(w.side || 'long') === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+          <select name="side">${['long','short'].map(s => `<option value="${s}" ${(w.side || 'long') === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}</select>
         </div>
         <div class="field"><label>Trigger</label><input type="number" step="any" name="trigger_price" value="${w.trigger_price ?? ''}" /></div>
         <div class="field"><label>Stop</label><input type="number" step="any" name="stop_loss" value="${w.stop_loss ?? ''}" /></div>
@@ -113,7 +113,7 @@ window.Tabs.watchlist = (function () {
         <div class="field"><label>Expires</label><input type="date" name="expires" value="${w.expires || expiresDefault}" /></div>
         <div class="field full"><label>Thesis</label><textarea name="thesis">${esc(w.thesis)}</textarea></div>
         <div class="field full"><label>Status</label>
-          <select name="status">${['watching','triggered','traded','expired'].map(s => `<option ${(w.status || 'watching') === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+          <select name="status">${['watching','triggered','traded','expired'].map(s => `<option value="${s}" ${(w.status || 'watching') === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}</select>
         </div>
       </div>
     `;

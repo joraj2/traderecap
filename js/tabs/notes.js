@@ -7,14 +7,14 @@ window.Tabs.notes = (function () {
       <div class="card-title-row" style="margin-bottom: 12px;">
         <h3 class="card-title" style="font-size: 14px;">Journal</h3>
         <button class="btn btn-primary btn-sm" id="n-add" style="margin-left: auto;">
-          <i data-lucide="plus"></i><span>New entry</span>
+          <i data-lucide="plus"></i><span>New Entry</span>
         </button>
       </div>
 
       ${notes.length === 0 ? `
         <div class="empty">
           <div class="emoji">📓</div>
-          <h3>Start journaling</h3>
+          <h3>Start Journaling</h3>
           <div>Daily reflection beats checking P&amp;L. Capture thoughts, market reads, lessons — anything that doesn't fit a single trade.</div>
         </div>
       ` : `
@@ -67,13 +67,13 @@ window.Tabs.notes = (function () {
     `;
 
     const cancel = document.createElement('button'); cancel.className = 'btn btn-ghost'; cancel.textContent = 'Cancel'; cancel.type = 'button';
-    const save = document.createElement('button'); save.className = 'btn btn-primary'; save.textContent = isEdit ? 'Save' : 'Add note'; save.type = 'submit';
+    const save = document.createElement('button'); save.className = 'btn btn-primary'; save.textContent = isEdit ? 'Save' : 'Add Note'; save.type = 'submit';
     const foot = document.createElement('div'); foot.style.display = 'flex'; foot.style.gap = '8px'; foot.style.width = '100%';
     if (isEdit) {
       const del = document.createElement('button'); del.className = 'btn btn-danger'; del.type = 'button'; del.textContent = 'Delete';
       del.style.marginRight = 'auto';
       del.addEventListener('click', async () => {
-        if (await Modal.confirm({ title: 'Delete note', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
+        if (await Modal.confirm({ title: 'Delete Note', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
           Store.update('notes', list => list.filter(x => x.id !== existing.id));
           Toast.success('Note deleted');
           Modal.close();
@@ -85,7 +85,7 @@ window.Tabs.notes = (function () {
     }
     foot.appendChild(cancel); foot.appendChild(save);
 
-    Modal.open({ title: isEdit ? 'Edit entry' : 'New journal entry', body: form, footer: foot, width: 640 });
+    Modal.open({ title: isEdit ? 'Edit Entry' : 'New Journal Entry', body: form, footer: foot, width: 640 });
 
     cancel.addEventListener('click', () => Modal.close());
     form.addEventListener('submit', e => {

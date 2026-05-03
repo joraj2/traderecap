@@ -1,5 +1,5 @@
 window.Store = (function () {
-  const KEYS = ['trades', 'watchlist', 'patterns', 'mistakes', 'premarket', 'review', 'macro', 'notes', 'tags', 'settings'];
+  const KEYS = ['trades', 'watchlist', 'patterns', 'mistakes', 'premarket', 'review', 'macro', 'notes', 'tags', 'settings', 'alerts'];
   const PREFIX = 'tr_';
   const state = {};
   const listeners = new Set();
@@ -34,7 +34,7 @@ window.Store = (function () {
   ];
 
   const DEFAULTS = {
-    trades: [], watchlist: [], patterns: [], notes: [],
+    trades: [], watchlist: [], patterns: [], notes: [], alerts: [],
     mistakes: DEFAULT_MISTAKES,
     premarket: {}, review: { weekly: {}, monthly: {} }, macro: {},
     tags: DEFAULT_TAGS, settings: DEFAULT_SETTINGS

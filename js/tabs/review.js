@@ -48,11 +48,11 @@ window.Tabs.review = (function () {
         <div class="card">
           <div class="card-title-row"><span class="dot"></span><h3 class="card-title">Reflection</h3></div>
           <div class="form-grid">
-            <div class="field full"><label>Themes (what showed up)</label><textarea id="rv-themes" rows="3">${esc(entry.themes)}</textarea></div>
-            <div class="field full"><label>What worked</label><textarea id="rv-worked" rows="3">${esc(entry.worked)}</textarea></div>
-            <div class="field full"><label>What didn't</label><textarea id="rv-failed" rows="3">${esc(entry.failed)}</textarea></div>
-            <div class="field full"><label>Repeat mistakes (named)</label><input id="rv-mistakes" value="${esc((entry.mistakes || []).join(', '))}" placeholder="chased_breakout, oversized" /></div>
-            <div class="field full"><label>Adjustments for next ${tab === 'weekly' ? 'week' : 'month'}</label><textarea id="rv-adjust" rows="3">${esc(entry.adjustments)}</textarea></div>
+            <div class="field full"><label>Themes (What Showed Up)</label><textarea id="rv-themes" rows="3">${esc(entry.themes)}</textarea></div>
+            <div class="field full"><label>What Worked</label><textarea id="rv-worked" rows="3">${esc(entry.worked)}</textarea></div>
+            <div class="field full"><label>What Didn't</label><textarea id="rv-failed" rows="3">${esc(entry.failed)}</textarea></div>
+            <div class="field full"><label>Repeat Mistakes (Named)</label><input id="rv-mistakes" value="${esc((entry.mistakes || []).join(', '))}" placeholder="chased_breakout, oversized" /></div>
+            <div class="field full"><label>Adjustments for Next ${tab === 'weekly' ? 'Week' : 'Month'}</label><textarea id="rv-adjust" rows="3">${esc(entry.adjustments)}</textarea></div>
           </div>
           <div style="margin-top: 12px;"><button class="btn btn-primary" id="rv-save"><i data-lucide="save"></i> Save Review</button></div>
         </div>

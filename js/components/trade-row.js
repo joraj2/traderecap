@@ -5,14 +5,18 @@ window.TradeRow = (function () {
     const rTxt = r != null ? r.toFixed(2) + 'R' : '–';
     const ac = assetClassChip(t.asset_class);
     const sideCls = t.side === 'short' ? 'short' : 'long';
+    const nEntries = (t.entries || []).length;
+    const nExits = (t.exits || []).length;
+    const entryBadge = nEntries > 1 ? `<span class="fill-badge" title="${nEntries} entry fills">×${nEntries}</span>` : '';
+    const exitBadge = nExits > 1 ? `<span class="fill-badge" title="${nExits} exit fills">×${nExits}</span>` : '';
     return `
       <tr data-trade-id="${t.id}" class="trade-row">
         <td class="num text-dim">${t.date}${t.entry_time ? ' <span class="text-dim">' + t.entry_time + '</span>' : ''}</td>
         <td><strong>${esc(t.symbol || '')}</strong> ${ac}</td>
         <td><span class="tag ${sideCls}">${(t.side || '').toUpperCase()}</span></td>
         <td>${esc(t.setup || '')}</td>
-        <td class="num">${fmt(t.entry_price)}</td>
-        <td class="num">${fmt(t.exit_price)}</td>
+        <td class="num">${fmt(t.entry_price)}${entryBadge}</td>
+        <td class="num">${fmt(t.exit_price)}${exitBadge}</td>
         <td class="num">${t.size || ''}</td>
         <td class="num ${p >= 0 ? 'text-pos' : 'text-neg'}"><strong>${Compute.fmtMoney(p)}</strong></td>
         <td class="num ${r != null && r >= 0 ? 'text-pos' : (r != null ? 'text-neg' : 'text-dim')}">${rTxt}</td>

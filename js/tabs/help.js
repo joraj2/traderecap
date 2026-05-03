@@ -2,127 +2,127 @@ window.Tabs = window.Tabs || {};
 window.Tabs.help = (function () {
   const FAQ = [
     {
-      cat: 'Getting started',
+      cat: 'Getting Started',
       q: 'How do I log my first trade?',
       a: 'Tap the green <b>+ Add Trade</b> button (top-right, or use the <kbd>N</kbd> shortcut on desktop). Pick the asset class (Stock, Option, Future, Crypto), fill entry/exit/size, and save. Your stats on the Today and Analytics tabs update instantly.'
     },
     {
-      cat: 'Getting started',
+      cat: 'Getting Started',
       q: 'What asset classes are supported?',
       a: 'Stocks, Options (with strike, expiry, IV, delta), Futures (contract, tick value, ticks captured), and Crypto (pair, leverage, perp/spot). Each asset class shows the right fields automatically.'
     },
     {
-      cat: 'Getting started',
+      cat: 'Getting Started',
       q: 'Can I journal swing/position trades, not just day trades?',
       a: 'Yes. Each trade has a <b>style</b> field — pick day, swing, or position. Holding period is computed from your entry and exit timestamps.'
     },
     {
-      cat: 'Data & privacy',
+      cat: 'Data & Privacy',
       q: 'Where is my trade data stored?',
       a: 'On your device only — nothing is sent to a server. Data lives in the app\'s local storage. We don\'t see your trades, your P&L, or your strategies.'
     },
     {
-      cat: 'Data & privacy',
+      cat: 'Data & Privacy',
       q: 'How do I back up my data?',
       a: 'Tap <b>Export</b> in the top bar. You\'ll get a JSON file with all your trades, watchlist, patterns, reviews, and settings. Save it to Google Drive, Dropbox, or email it to yourself. Use <b>Import</b> to restore.'
     },
     {
-      cat: 'Data & privacy',
+      cat: 'Data & Privacy',
       q: 'How do I move data to another phone?',
       a: 'Export on phone A → save the JSON to cloud storage → on phone B, install the app and tap Import → pick the file. Everything restores.'
     },
     {
-      cat: 'Data & privacy',
+      cat: 'Data & Privacy',
       q: 'Will my data survive an app update?',
       a: 'Yes. App updates do not clear your local storage. Still, export weekly as insurance — phones get reset, lost, or replaced.'
     },
     {
-      cat: 'Data & privacy',
+      cat: 'Data & Privacy',
       q: 'How do I delete all my data?',
       a: 'Settings → <b>Reset all data</b>. This is permanent and not recoverable, so export first if you want a backup.'
     },
     {
-      cat: 'Stats & analytics',
+      cat: 'Stats & Analytics',
       q: 'How is win rate calculated?',
       a: 'Win rate = winning trades ÷ total trades. A trade with P&L > 0 is a win. Breakeven trades count as neither.'
     },
     {
-      cat: 'Stats & analytics',
+      cat: 'Stats & Analytics',
       q: 'What is profit factor?',
       a: 'Profit factor = gross profits ÷ gross losses. Above 1.5 is decent; above 2.0 is strong. Below 1.0 means you\'re losing money overall.'
     },
     {
-      cat: 'Stats & analytics',
+      cat: 'Stats & Analytics',
       q: 'What is expectancy?',
       a: 'Expectancy is the average dollars you can expect per trade. Formula: (win rate × avg win) − (loss rate × avg loss). Positive expectancy = profitable strategy long-run.'
     },
     {
-      cat: 'Stats & analytics',
+      cat: 'Stats & Analytics',
       q: 'What does R-multiple mean?',
       a: 'R = your reward divided by your initial risk. If you risked $100 and made $250, that\'s a 2.5R win. R-multiples normalize trades across different position sizes so you can compare setups fairly.'
     },
     {
-      cat: 'Stats & analytics',
+      cat: 'Stats & Analytics',
       q: 'Why is my Sharpe ratio low?',
       a: 'Sharpe penalizes inconsistency. Even a profitable trader has a low Sharpe if returns are very volatile. Aim for steadier daily P&L rather than home-run days alongside big losses.'
     },
     {
-      cat: 'Calendar & heatmap',
+      cat: 'Calendar & Heatmap',
       q: 'How does the P&L heatmap work?',
       a: 'Each day shows total P&L. Green = winning day, red = losing day, deeper shade = larger move. Tap any day to see the trades that produced that result.'
     },
     {
-      cat: 'Calendar & heatmap',
+      cat: 'Calendar & Heatmap',
       q: 'Can I switch to weekly or yearly view?',
       a: 'Yes — toggle Month / Week / Year at the top of the Calendar tab.'
     },
     {
-      cat: 'Patterns & playbook',
+      cat: 'Patterns & Playbook',
       q: 'What is the Patterns tab for?',
       a: 'Build your personal playbook: name a setup, write the entry rules, exit rules, and invalidation. Tag trades with the pattern when you log them. The app then shows you per-pattern win rate, expectancy, and average R automatically.'
     },
     {
-      cat: 'Patterns & playbook',
+      cat: 'Patterns & Playbook',
       q: 'How do I link a trade to a pattern?',
       a: 'When adding/editing a trade, pick the pattern from the Setup chip-picker. Once linked, that trade contributes to the pattern\'s stats.'
     },
     {
-      cat: 'Watchlist & pre-market',
+      cat: 'Watchlist & Pre-Market',
       q: 'What\'s the difference between Watchlist and Pre-market?',
       a: 'Watchlist = ongoing setups you\'re monitoring (stays until you trade or it expires). Pre-market = today\'s plan only — bias, levels, catalysts, invalidation. Pre-market is date-keyed so yesterday\'s plan is preserved.'
     },
     {
-      cat: 'Watchlist & pre-market',
+      cat: 'Watchlist & Pre-Market',
       q: 'Why did my watchlist item disappear?',
       a: 'Watchlist items auto-expire after their <b>Valid until</b> date. Expired items still show but greyed out. Bump the date to keep them active.'
     },
     {
-      cat: 'Mistakes & review',
+      cat: 'Mistakes & Review',
       q: 'How does the Mistakes tab work?',
       a: 'Tag a trade with one or more mistakes (chased breakout, oversized, revenge trade, etc.). The app aggregates them, ranking by total dollar impact so you see exactly which mistake is costing you the most.'
     },
     {
-      cat: 'Mistakes & review',
+      cat: 'Mistakes & Review',
       q: 'When should I do a Review?',
       a: 'Weekly review every Sunday — what worked, what failed, repeat mistakes, adjustments for next week. Monthly review on the 1st — bigger themes, regime shifts, drawdown analysis. Both forms are in the Review tab.'
     },
     {
-      cat: 'Macro tracking',
+      cat: 'Macro Tracking',
       q: 'What goes in the Macro tab?',
       a: 'Daily tape note: regime (bull/bear/chop), market breadth, VIX reading, key levels (e.g. SPX 5000), upcoming catalysts (FOMC, CPI, earnings). Useful to look back later and ask "did I respect macro on losing days?"'
     },
     {
-      cat: 'Pricing & ads',
+      cat: 'Pricing & Ads',
       q: 'Is the app free?',
       a: 'Yes. The app is free, supported by occasional ads. Ads appear at the bottom of secondary tabs (Calendar, Analytics, Watchlist) and never during trade entry. We will never sell or share your trade data.'
     },
     {
-      cat: 'Pricing & ads',
+      cat: 'Pricing & Ads',
       q: 'Why am I seeing ads?',
       a: 'Ads keep the app free and let us keep building features. We\'ve placed them where they don\'t interrupt your workflow — never during trade entry, never as pop-ups while you\'re reviewing the day.'
     },
     {
-      cat: 'Pricing & ads',
+      cat: 'Pricing & Ads',
       q: 'Can I remove ads?',
       a: 'A one-tap ad removal option may arrive in a future update. For now, ads are required to keep the app free.'
     },

@@ -16,7 +16,7 @@ window.Tabs.patterns = (function () {
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px;">
           ${patterns.map(p => card(p, trades)).join('')}
         </div>
-      ` : `<div class="empty"><div class="emoji">📚</div><h3>No patterns in your playbook yet</h3><div>Add named setups with rules + ideal/anti examples. Trades you tag with a pattern populate its stats automatically.</div></div>`}
+      ` : `<div class="empty"><div class="emoji">📚</div><h3>No Patterns in Your Playbook Yet</h3><div>Add named setups with rules + ideal/anti examples. Trades you tag with a pattern populate its stats automatically.</div></div>`}
     `;
 
     if (window.lucide) lucide.createIcons();
@@ -30,7 +30,7 @@ window.Tabs.patterns = (function () {
     }));
     host.querySelectorAll('[data-action="del-pattern"]').forEach(b => b.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (await Modal.confirm({ title: 'Delete pattern', message: 'Linked trades will keep their pattern_id but the pattern entry will be removed.', okText: 'Delete', danger: true })) {
+      if (await Modal.confirm({ title: 'Delete Pattern', message: 'Linked trades will keep their pattern_id but the pattern entry will be removed.', okText: 'Delete', danger: true })) {
         Store.update('patterns', list => list.filter(x => x.id !== b.dataset.id));
       }
     }));
@@ -68,14 +68,14 @@ window.Tabs.patterns = (function () {
         <div class="field"><label>Name</label><input name="name" value="${esc(p.name)}" required placeholder="VWAP Reclaim" /></div>
         <div class="field"><label>Bias</label>
           <select name="bias">
-            ${['long','short','either'].map(s => `<option ${p.bias === s ? 'selected' : ''}>${s}</option>`).join('')}
+            ${['long','short','either'].map(s => `<option value="${s}" ${p.bias === s ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
           </select>
         </div>
         <div class="field full"><label>Description</label><textarea name="description" placeholder="When does this setup work? Tape conditions, prerequisites, expected behaviour.">${esc(p.description)}</textarea></div>
         <div class="field full"><label>Rules</label><textarea name="rules" placeholder="Entry trigger, stop placement, target, sizing rules.">${esc(p.rules)}</textarea></div>
         <div class="field full"><label>Invalidation</label><textarea name="invalidation" placeholder="What proves this thesis wrong? Where do I bail?">${esc(p.invalidation)}</textarea></div>
-        <div class="field"><label>Timeframes (comma-separated)</label><input name="timeframes" value="${esc((p.timeframes || []).join(', '))}" placeholder="1m, 5m, daily" /></div>
-        <div class="field"><label>Asset classes (comma-separated)</label><input name="assets" value="${esc((p.assets || []).join(', '))}" placeholder="stock, future" /></div>
+        <div class="field"><label>Timeframes (Comma-Separated)</label><input name="timeframes" value="${esc((p.timeframes || []).join(', '))}" placeholder="1m, 5m, daily" /></div>
+        <div class="field"><label>Asset Classes (Comma-Separated)</label><input name="assets" value="${esc((p.assets || []).join(', '))}" placeholder="stock, future" /></div>
       </div>
     `;
     const cancel = el('button', { class: 'btn btn-ghost', type: 'button' }, 'Cancel');

@@ -4,9 +4,36 @@ window.Compute = (function () {
     const gross = typeof t.gross_pnl === 'number' ? t.gross_pnl : computeGross(t);
     return gross - (t.fees || 0);
   }
+  function fills(t) {
+    const entries = (t.entries && t.entries.length)
+      ? t.entries
+      : (isFinite(+t.entry_price) && isFinite(+t.size) ? [{ price: +t.entry_price, size: +t.size }] : []);
+    const exits = (t.exits && t.exits.length)
+      ? t.exits
+      : (isFinite(+t.exit_price) && isFinite(+t.size) ? [{ price: +t.exit_price, size: +t.size }] : []);
+    return { entries, exits };
+  }
+  function avgEntry(t) {
+    const { entries } = fills(t);
+    const sz = entries.reduce((s, e) => s + (+e.size || 0), 0);
+    if (!sz) return null;
+    return entries.reduce((s, e) => s + (+e.price * +e.size), 0) / sz;
+  }
+  function avgExit(t) {
+    const { exits } = fills(t);
+    const sz = exits.reduce((s, e) => s + (+e.size || 0), 0);
+    if (!sz) return null;
+    return exits.reduce((s, e) => s + (+e.price * +e.size), 0) / sz;
+  }
+  function totalSize(t) {
+    const { entries, exits } = fills(t);
+    const ein = entries.reduce((s, e) => s + (+e.size || 0), 0);
+    const eout = exits.reduce((s, e) => s + (+e.size || 0), 0);
+    return Math.min(ein, eout);
+  }
   function computeGross(t) {
-    const ep = +t.entry_price, xp = +t.exit_price, sz = +t.size;
-    if (!isFinite(ep) || !isFinite(xp) || !isFinite(sz)) return 0;
+    const ae = avgEntry(t), ax = avgExit(t), sz = totalSize(t);
+    if (ae == null || ax == null || !sz) return 0;
     let mult = 1;
     if (t.asset_class === 'option') mult = 100;
     if (t.asset_class === 'future' && t.asset_specific && t.asset_specific.future) {
@@ -14,17 +41,18 @@ window.Compute = (function () {
       if (f.tick_value && f.tick_size) mult = f.tick_value / f.tick_size;
     }
     const dir = t.side === 'short' ? -1 : 1;
-    return (xp - ep) * sz * mult * dir;
+    return (ax - ae) * sz * mult * dir;
   }
   function isWin(t) { return pnl(t) > 0; }
   function isLoss(t) { return pnl(t) < 0; }
   function rMultiple(t) {
     if (typeof t.r_multiple === 'number') return t.r_multiple;
-    if (!t.entry_price || !t.stop_loss) return null;
-    const risk = Math.abs(+t.entry_price - +t.stop_loss);
+    const ae = avgEntry(t), ax = avgExit(t);
+    if (ae == null || !t.stop_loss) return null;
+    const risk = Math.abs(ae - +t.stop_loss);
     if (!risk) return null;
     const dir = t.side === 'short' ? -1 : 1;
-    return ((+t.exit_price - +t.entry_price) * dir) / risk;
+    return ((ax - ae) * dir) / risk;
   }
   const sum = (arr, fn) => arr.reduce((a, t) => a + (fn ? fn(t) : t), 0);
 
@@ -282,6 +310,7 @@ window.Compute = (function () {
 
   return {
     pnl, isWin, isLoss, rMultiple, computeGross,
+    avgEntry, avgExit, totalSize, fills,
     totals, equityCurve, maxDrawdown, sharpeRatio, streaks,
     byDay, groupBy, tradesInRange, tradesForDate,
     fmtMoney, fmtMoneyShort, fmtPct, fmtNum, todayISO, nowTime, dateLong,

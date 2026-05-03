@@ -19,17 +19,17 @@ window.Tabs.macro = (function () {
           </div>
           <div class="form-grid cols-2">
             <div class="field"><label>Regime</label>
-              <select id="m-regime">${['risk_on','risk_off','chop','transition','trend_up','trend_down'].map(s => `<option ${note.regime === s ? 'selected' : ''}>${s.replace('_',' ')}</option>`).join('')}</select>
+              <select id="m-regime">${['risk_on','risk_off','chop','transition','trend_up','trend_down'].map(s => `<option value="${s}" ${note.regime === s ? 'selected' : ''}>${s.replace('_',' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`).join('')}</select>
             </div>
             <div class="field"><label>Bias</label>
-              <select id="m-bias">${['long','short','neutral','no_trade'].map(s => `<option ${note.bias === s ? 'selected' : ''}>${s}</option>`).join('')}</select>
+              <select id="m-bias">${['long','short','neutral','no_trade'].map(s => `<option value="${s}" ${note.bias === s ? 'selected' : ''}>${s.replace('_',' ').replace(/\b\w/g, c => c.toUpperCase())}</option>`).join('')}</select>
             </div>
             <div class="field"><label>Breadth</label><input id="m-breadth" value="${esc(note.breadth || '')}" placeholder="A/D, McClellan, % above 20EMA" /></div>
             <div class="field"><label>Volatility (VIX)</label><input id="m-vix" value="${esc(note.vix || '')}" /></div>
-            <div class="field full"><label>Key levels (SPX / NDX / BTC / DXY)</label>
+            <div class="field full"><label>Key Levels (SPX / NDX / BTC / DXY)</label>
               <input id="m-levels" value="${esc((note.levels || []).join(', '))}" placeholder="SPX 4502/4485/4520, NDX 15800, BTC 92500, DXY 104" />
             </div>
-            <div class="field full"><label>Catalysts ahead</label>
+            <div class="field full"><label>Catalysts Ahead</label>
               <input id="m-catalysts" value="${esc((note.catalysts || []).join(', '))}" placeholder="CPI Wed, FOMC Thu, NVDA earnings Fri" />
             </div>
             <div class="field full"><label>Notes</label>
@@ -74,7 +74,7 @@ window.Tabs.macro = (function () {
       Toast.success(`Macro note saved for ${editing}`);
     });
     host.querySelector('#m-clear').addEventListener('click', async () => {
-      if (await Modal.confirm({ title: 'Clear note', message: `Delete the macro note for ${editing}?`, okText: 'Clear', danger: true })) {
+      if (await Modal.confirm({ title: 'Clear Note', message: `Delete the macro note for ${editing}?`, okText: 'Clear', danger: true })) {
         Store.update('macro', obj => { delete obj[editing]; });
         render(host);
       }

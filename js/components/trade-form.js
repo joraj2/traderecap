@@ -83,32 +83,6 @@ window.TradeForm = (function () {
         </div>
 
         <div class="field">
-          <label>Entry Time</label>
-          <input type="time" name="entry_time" value="${t.entry_time || ''}" />
-        </div>
-        <div class="field">
-          <label>Exit Time</label>
-          <input type="time" name="exit_time" value="${t.exit_time || ''}" />
-        </div>
-        <div class="field">
-          <label>Size</label>
-          <input type="number" name="size" step="any" value="${t.size ?? ''}" required />
-        </div>
-
-        <div class="field">
-          <label>Entry Price</label>
-          <input type="number" name="entry_price" step="any" value="${t.entry_price ?? ''}" required />
-        </div>
-        <div class="field">
-          <label>Exit Price</label>
-          <input type="number" name="exit_price" step="any" value="${t.exit_price ?? ''}" required />
-        </div>
-        <div class="field">
-          <label>Fees ($)</label>
-          <input type="number" name="fees" step="any" value="${t.fees ?? 0}" />
-        </div>
-
-        <div class="field">
           <label>Stop Loss</label>
           <input type="number" name="stop_loss" step="any" value="${t.stop_loss ?? ''}" />
         </div>
@@ -117,11 +91,16 @@ window.TradeForm = (function () {
           <input type="number" name="target" step="any" value="${t.target ?? ''}" />
         </div>
         <div class="field">
-          <label title="Maximum Adverse Excursion — worst price reached against you during the trade">MAE <span class="text-dim">(worst price)</span></label>
+          <label>Fees ($)</label>
+          <input type="number" name="fees" step="any" value="${t.fees ?? 0}" />
+        </div>
+
+        <div class="field">
+          <label title="Maximum Adverse Excursion — worst price reached against you during the trade">MAE <span class="text-dim">(Worst Price)</span></label>
           <input type="number" name="mae" step="any" value="${t.mae ?? ''}" placeholder="Worst price hit" />
         </div>
         <div class="field">
-          <label title="Maximum Favourable Excursion — best price reached in your favour">MFE <span class="text-dim">(best price)</span></label>
+          <label title="Maximum Favourable Excursion — best price reached in your favour">MFE <span class="text-dim">(Best Price)</span></label>
           <input type="number" name="mfe" step="any" value="${t.mfe ?? ''}" placeholder="Best price hit" />
         </div>
         <div class="field">
@@ -132,6 +111,26 @@ window.TradeForm = (function () {
           </select>
         </div>
       </div>
+
+      <div class="divider"></div>
+
+      <div class="fills-section">
+        <div class="fills-head">
+          <div class="section-title" style="margin: 0;"><i data-lucide="log-in" style="width:14px; height:14px; vertical-align: -2px;"></i> Entries</div>
+          <button type="button" class="btn btn-sm" id="add-entry"><i data-lucide="plus"></i> Add Entry</button>
+        </div>
+        <div class="fills-list" id="entries-list"></div>
+      </div>
+
+      <div class="fills-section" style="margin-top: 16px;">
+        <div class="fills-head">
+          <div class="section-title" style="margin: 0;"><i data-lucide="log-out" style="width:14px; height:14px; vertical-align: -2px;"></i> Exits</div>
+          <button type="button" class="btn btn-sm" id="add-exit"><i data-lucide="plus"></i> Add Exit</button>
+        </div>
+        <div class="fills-list" id="exits-list"></div>
+      </div>
+
+      <div class="fills-summary" id="fills-summary"></div>
 
       <div id="asset-specific" style="margin-top: 12px;"></div>
 
@@ -147,7 +146,7 @@ window.TradeForm = (function () {
         </div>
 
         <div class="field full">
-          <label>Pattern (link to Playbook)</label>
+          <label>Pattern (Link to Playbook)</label>
           <select name="pattern_id">
             <option value="">—</option>
             ${patterns.map(p => `<option value="${esc(p.id)}" ${t.pattern_id === p.id ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}
@@ -155,7 +154,7 @@ window.TradeForm = (function () {
         </div>
 
         <div class="field full">
-          <label>Thesis (why I took this)</label>
+          <label>Thesis (Why I Took This)</label>
           <textarea name="thesis" placeholder="What's the edge? What invalidates it?">${esc(t.thesis)}</textarea>
         </div>
 
@@ -174,7 +173,7 @@ window.TradeForm = (function () {
         </div>
 
         <div class="field full">
-          <label>Lesson / What to do differently</label>
+          <label>Lesson / What to Do Differently</label>
           <textarea name="lesson" placeholder="Key takeaway from this trade...">${esc(t.lesson)}</textarea>
         </div>
 
@@ -192,7 +191,7 @@ window.TradeForm = (function () {
     if (isEdit) {
       const delBtn = el('button', { class: 'btn btn-danger', type: 'button', style: 'margin-right:auto' }, 'Delete');
       delBtn.addEventListener('click', async () => {
-        if (await Modal.confirm({ title: 'Delete trade', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
+        if (await Modal.confirm({ title: 'Delete Trade', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
           Store.update('trades', list => list.filter(x => x.id !== existing.id));
           Toast.success('Trade deleted');
           Modal.close();
@@ -205,12 +204,74 @@ window.TradeForm = (function () {
 
     const m = Modal.open({ title: isEdit ? 'Edit Trade' : 'Add Trade', body: form, footer: foot, width: 760 });
 
-    // State for chip pickers + screenshots
+    // State for chip pickers + screenshots + fills
     const state = {
       emotions: [...(t.emotions || [])],
       mistakes: [...(t.mistakes || [])],
-      screenshots: [...(t.screenshots || [])]
+      screenshots: [...(t.screenshots || [])],
+      entries: seedFills(t, 'entry'),
+      exits: seedFills(t, 'exit')
     };
+
+    // Render fills (entries/exits) and the live summary
+    const entriesList = form.querySelector('#entries-list');
+    const exitsList = form.querySelector('#exits-list');
+    const summary = form.querySelector('#fills-summary');
+    function renderFills() {
+      entriesList.innerHTML = state.entries.map((e, i) => fillRow('entry', e, i, state.entries.length === 1)).join('');
+      exitsList.innerHTML = state.exits.map((e, i) => fillRow('exit', e, i, state.exits.length === 1)).join('');
+      wireFillRows();
+      renderSummary();
+      if (window.lucide) lucide.createIcons();
+    }
+    function wireFillRows() {
+      form.querySelectorAll('.fill-row input').forEach(inp => {
+        inp.addEventListener('input', () => {
+          const row = inp.closest('.fill-row');
+          const kind = row.dataset.kind;
+          const i = +row.dataset.idx;
+          const field = inp.dataset.field;
+          state[kind === 'entry' ? 'entries' : 'exits'][i][field] = inp.value;
+          renderSummary();
+        });
+      });
+      form.querySelectorAll('.fill-row .remove-fill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const row = btn.closest('.fill-row');
+          const kind = row.dataset.kind;
+          const i = +row.dataset.idx;
+          state[kind === 'entry' ? 'entries' : 'exits'].splice(i, 1);
+          renderFills();
+        });
+      });
+    }
+    function renderSummary() {
+      const draft = { side: form.querySelector('[name="side"]')?.value || 'long', asset_class: form.querySelector('[name="asset_class"]')?.value || 'stock', entries: state.entries, exits: state.exits, asset_specific: t.asset_specific };
+      const ae = Compute.avgEntry(draft);
+      const ax = Compute.avgExit(draft);
+      const sz = Compute.totalSize(draft);
+      const gross = Compute.computeGross(draft);
+      const tone = gross > 0 ? 'text-pos' : gross < 0 ? 'text-neg' : 'text-dim';
+      summary.innerHTML = ae != null && ax != null && sz ? `
+        <div class="fills-summary-row">
+          <span><span class="text-dim">Avg Entry:</span> <strong class="num">${ae.toFixed(4).replace(/\.?0+$/,'')}</strong></span>
+          <span><span class="text-dim">Avg Exit:</span> <strong class="num">${ax.toFixed(4).replace(/\.?0+$/,'')}</strong></span>
+          <span><span class="text-dim">Size:</span> <strong class="num">${sz}</strong></span>
+          <span style="margin-left:auto;"><span class="text-dim">Projected P&L:</span> <strong class="num ${tone}">${Compute.fmtMoney(gross)}</strong></span>
+        </div>
+      ` : `<div class="text-dim" style="font-size: 12px; padding: 6px 0;">Add at least one entry and one exit to see your projected P&L.</div>`;
+    }
+    renderFills();
+    form.querySelector('#add-entry').addEventListener('click', () => {
+      state.entries.push({ price: '', size: '', time: Compute.nowTime() });
+      renderFills();
+    });
+    form.querySelector('#add-exit').addEventListener('click', () => {
+      state.exits.push({ price: '', size: '', time: Compute.nowTime() });
+      renderFills();
+    });
+    form.querySelector('[name="side"]').addEventListener('change', renderSummary);
+    form.querySelector('#asset-class').addEventListener('change', renderSummary);
     const thumbs = form.querySelector('#thumbs');
     function renderThumbs() {
       thumbs.innerHTML = state.screenshots.map((src, i) =>
@@ -299,6 +360,20 @@ window.TradeForm = (function () {
       e.preventDefault();
       const fd = new FormData(form);
       const data = Object.fromEntries(fd);
+      const cleanEntries = state.entries.map(e => ({ price: num(e.price), size: num(e.size), time: e.time || null })).filter(e => isFinite(e.price) && e.price > 0 && isFinite(e.size) && e.size > 0);
+      const cleanExits = state.exits.map(e => ({ price: num(e.price), size: num(e.size), time: e.time || null })).filter(e => isFinite(e.price) && e.price > 0 && isFinite(e.size) && e.size > 0);
+      if (!cleanEntries.length || !cleanExits.length) {
+        Toast.error('Add at least one entry and one exit (price + size).');
+        return;
+      }
+      const totalEntrySize = cleanEntries.reduce((s, e) => s + e.size, 0);
+      const totalExitSize = cleanExits.reduce((s, e) => s + e.size, 0);
+      const matchedSize = Math.min(totalEntrySize, totalExitSize);
+      const wAvgEntry = cleanEntries.reduce((s, e) => s + e.price * e.size, 0) / totalEntrySize;
+      const wAvgExit = cleanExits.reduce((s, e) => s + e.price * e.size, 0) / totalExitSize;
+      const firstEntryTime = cleanEntries.map(e => e.time).filter(Boolean).sort()[0] || null;
+      const lastExitTime = cleanExits.map(e => e.time).filter(Boolean).sort().slice(-1)[0] || null;
+
       const out = {
         id: existing ? existing.id : Store.uuid(),
         date: data.date,
@@ -306,11 +381,13 @@ window.TradeForm = (function () {
         symbol: (data.symbol || '').toUpperCase().trim(),
         side: data.side,
         style: data.style,
-        entry_time: data.entry_time || null,
-        exit_time: data.exit_time || null,
-        entry_price: num(data.entry_price),
-        exit_price: num(data.exit_price),
-        size: num(data.size),
+        entries: cleanEntries,
+        exits: cleanExits,
+        entry_time: firstEntryTime,
+        exit_time: lastExitTime,
+        entry_price: wAvgEntry,
+        exit_price: wAvgExit,
+        size: matchedSize,
         stop_loss: num(data.stop_loss, true),
         target: num(data.target, true),
         mae: num(data.mae, true),
@@ -377,12 +454,43 @@ window.TradeForm = (function () {
     return {
       id: null, date: Compute.todayISO(), asset_class: 'stock', symbol: '',
       side: 'long', style: 'day', entry_time: Compute.nowTime(), exit_time: null,
+      entries: [], exits: [],
       entry_price: null, exit_price: null, size: null,
       stop_loss: null, target: null, mae: null, mfe: null, fees: 0,
       setup: '', pattern_id: null, thesis: '', conviction: 3, catalyst: null,
       emotions: [], mistakes: [], lesson: '', screenshots: [],
       asset_specific: {}
     };
+  }
+
+  // Seed entries/exits state from a trade (existing or fresh).
+  // Migrates legacy single-fill trades on the fly so the form always edits arrays.
+  function seedFills(t, kind) {
+    const arr = kind === 'entry' ? t.entries : t.exits;
+    if (Array.isArray(arr) && arr.length) {
+      return arr.map(f => ({ price: f.price ?? '', size: f.size ?? '', time: f.time || '' }));
+    }
+    const price = kind === 'entry' ? t.entry_price : t.exit_price;
+    const time = kind === 'entry' ? t.entry_time : t.exit_time;
+    if (price != null || t.size != null) {
+      return [{ price: price ?? '', size: t.size ?? '', time: time || '' }];
+    }
+    return [{ price: '', size: '', time: kind === 'entry' ? Compute.nowTime() : '' }];
+  }
+
+  function fillRow(kind, f, idx, isOnly) {
+    const label = kind === 'entry' ? 'Entry' : 'Exit';
+    return `
+      <div class="fill-row" data-kind="${kind}" data-idx="${idx}">
+        <div class="fill-label">${label} ${idx + 1}</div>
+        <div class="fill-fields">
+          <input type="number" step="any" data-field="price" placeholder="Price" value="${f.price ?? ''}" />
+          <input type="number" step="any" data-field="size" placeholder="Size" value="${f.size ?? ''}" />
+          <input type="time" data-field="time" value="${f.time || ''}" />
+        </div>
+        <button type="button" class="btn btn-icon btn-sm btn-danger remove-fill" ${isOnly ? 'style="visibility:hidden"' : ''} aria-label="Remove ${label}"><i data-lucide="x"></i></button>
+      </div>
+    `;
   }
 
   function num(v, allowEmpty = false) {

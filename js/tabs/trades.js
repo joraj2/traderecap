@@ -38,7 +38,7 @@ window.Tabs.trades = (function () {
               <option value="short" ${filters.side === 'short' ? 'selected' : ''}>Short</option>
             </select>
           </div>
-          <div class="field" style="min-width: 200px; flex:1;"><label>Search symbol / setup / thesis</label>
+          <div class="field" style="min-width: 200px; flex:1;"><label>Search Symbol / Setup / Thesis</label>
             <input type="search" id="f-search" placeholder="AAPL, vwap_reclaim..." value="${filters.search}" />
           </div>
           <button class="btn btn-ghost" id="f-clear">Clear</button>
@@ -50,7 +50,7 @@ window.Tabs.trades = (function () {
           ${TradeRow.header()}
           <tbody id="trades-body">
             ${filtered.length ? filtered.map(t => TradeRow.row(t) + (t.id === expandedId ? TradeRow.detail(t) : '')).join('') :
-              '<tr><td colspan="9"><div class="empty"><div class="emoji">📒</div><h3>No trades yet</h3><div>Click <strong>+ Add Trade</strong> to log your first one.</div></div></td></tr>'}
+              '<tr><td colspan="9"><div class="empty"><div class="emoji">📒</div><h3>No Trades Yet</h3><div>Click <strong>+ Add Trade</strong> to log your first one.</div></div></td></tr>'}
           </tbody>
         </table>
       </div>
@@ -85,7 +85,7 @@ window.Tabs.trades = (function () {
       if (t) TradeForm.open(t);
     }));
     host.querySelectorAll('[data-action="delete-trade"]').forEach(b => b.addEventListener('click', async () => {
-      if (await Modal.confirm({ title: 'Delete trade', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
+      if (await Modal.confirm({ title: 'Delete Trade', message: 'This cannot be undone.', okText: 'Delete', danger: true })) {
         Store.update('trades', list => list.filter(x => x.id !== b.dataset.id));
         Toast.success('Trade deleted');
       }

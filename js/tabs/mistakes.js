@@ -25,7 +25,7 @@ window.Tabs.mistakes = (function () {
 
       <div class="table-wrap">
         <table class="table">
-          <thead><tr><th>Mistake</th><th>Description</th><th class="num">Times tagged</th><th class="num">Total impact</th><th class="num">Avg / occurrence</th><th>Last seen</th><th></th></tr></thead>
+          <thead><tr><th>Mistake</th><th>Description</th><th class="num">Times Tagged</th><th class="num">Total Impact</th><th class="num">Avg / Occurrence</th><th>Last Seen</th><th></th></tr></thead>
           <tbody>
             ${sorted.map(m => `
               <tr data-mistake-id="${m.id}" style="cursor:pointer;">
@@ -58,7 +58,7 @@ window.Tabs.mistakes = (function () {
         else body.innerHTML = `
           <div class="table-wrap"><table class="table">${TradeRow.header()}<tbody>${linked.map(t => TradeRow.row(t)).join('')}</tbody></table></div>
         `;
-        const editBtn = document.createElement('button'); editBtn.className = 'btn'; editBtn.textContent = 'Edit definition';
+        const editBtn = document.createElement('button'); editBtn.className = 'btn'; editBtn.textContent = 'Edit Definition';
         editBtn.addEventListener('click', () => { Modal.close(); openForm(m); });
         const foot = document.createElement('div'); foot.style.marginLeft = 'auto'; foot.appendChild(editBtn);
         Modal.open({ title: m.label, body, footer: foot, width: 920 });
@@ -66,7 +66,7 @@ window.Tabs.mistakes = (function () {
     }));
     host.querySelectorAll('[data-action="del-mistake"]').forEach(b => b.addEventListener('click', async (e) => {
       e.stopPropagation();
-      if (await Modal.confirm({ title: 'Delete mistake definition', message: 'Trades tagged with this mistake will keep the tag string but lose the label.', okText: 'Delete', danger: true })) {
+      if (await Modal.confirm({ title: 'Delete Mistake Definition', message: 'Trades tagged with this mistake will keep the tag string but lose the label.', okText: 'Delete', danger: true })) {
         Store.update('mistakes', list => list.filter(x => x.id !== b.dataset.id));
       }
     }));
@@ -77,7 +77,7 @@ window.Tabs.mistakes = (function () {
     const form = document.createElement('form');
     form.innerHTML = `
       <div class="form-grid">
-        <div class="field"><label>ID (slug)</label><input name="id" value="${esc(m.id)}" required placeholder="chased_breakout" ${existing ? 'readonly' : ''} /></div>
+        <div class="field"><label>ID (Slug)</label><input name="id" value="${esc(m.id)}" required placeholder="chased_breakout" ${existing ? 'readonly' : ''} /></div>
         <div class="field"><label>Label</label><input name="label" value="${esc(m.label)}" required placeholder="Chased breakout" /></div>
         <div class="field full"><label>Description</label><textarea name="description">${esc(m.description)}</textarea></div>
       </div>

@@ -56,7 +56,7 @@ window.Tabs.analytics = (function () {
       </div>
 
       <div class="card" style="margin-top:12px;">
-        <div class="card-title-row"><span class="dot"></span><h3 class="card-title">Top Mistakes (by $ impact)</h3></div>
+        <div class="card-title-row"><span class="dot"></span><h3 class="card-title">Top Mistakes (By $ Impact)</h3></div>
         <div id="mistakes-table"></div>
       </div>
     `;

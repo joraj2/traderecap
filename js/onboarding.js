@@ -32,7 +32,7 @@ window.Onboarding = (function () {
       overlay.innerHTML = `
         <div class="modal" role="dialog" aria-modal="true" style="width: min(560px, calc(100vw - 32px));">
           <div class="modal-head">
-            <h3 class="modal-title">Welcome — let's set up your journal</h3>
+            <h3 class="modal-title">Welcome — Let's Set Up Your Journal</h3>
           </div>
           <div class="modal-body">
             <p class="text-2" style="margin: 0 0 16px; line-height: 1.5;">
@@ -40,11 +40,11 @@ window.Onboarding = (function () {
             </p>
             <form id="onboard-form" class="form-grid cols-2">
               <div class="field full">
-                <label>What should we call you?</label>
+                <label>What Should We Call You?</label>
                 <input name="trader_name" required autofocus placeholder="e.g. Alex" maxlength="40" />
               </div>
               <div class="field">
-                <label>Starting capital</label>
+                <label>Starting Capital</label>
                 <input name="starting_balance" type="number" min="0" step="any" required placeholder="10000" />
               </div>
               <div class="field">
@@ -54,7 +54,7 @@ window.Onboarding = (function () {
                 </select>
               </div>
               <div class="field full">
-                <label>What do you trade? <span class="text-dim" style="font-weight: 400;">(pick any)</span></label>
+                <label>What Do You Trade? <span class="text-dim" style="font-weight: 400;">(Pick Any)</span></label>
                 <div class="instrument-chips" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;">
                   ${INSTRUMENTS.map(i => `
                     <label class="chip-toggle" style="cursor:pointer;">
@@ -77,7 +77,7 @@ window.Onboarding = (function () {
           </div>
           <div class="modal-foot">
             <button class="btn btn-primary" id="onboard-save" type="button" style="margin-left: auto;">
-              Get started
+              Get Started
             </button>
           </div>
         </div>

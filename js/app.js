@@ -5,6 +5,7 @@
     { id: 'calendar',  label: 'Calendar',    icon: 'calendar-days',    primary: true },
     { id: 'analytics', label: 'Analytics',   icon: 'bar-chart-3',      primary: true },
     { id: 'watchlist', label: 'Watchlist',   icon: 'eye' },
+    { id: 'alerts',    label: 'Alerts',      icon: 'bell' },
     { id: 'patterns',  label: 'Patterns',    icon: 'layers' },
     { id: 'premarket', label: 'Pre-market',  icon: 'sunrise' },
     { id: 'review',    label: 'Review',      icon: 'rotate-ccw' },
@@ -16,7 +17,7 @@
 
   const PAGE_TITLES = {
     today: 'Dashboard', calendar: 'Calendar', trades: 'Trades', analytics: 'Analytics',
-    watchlist: 'Watchlist', patterns: 'Patterns', premarket: 'Pre-market Plan',
+    watchlist: 'Watchlist', alerts: 'Price Alerts', patterns: 'Patterns', premarket: 'Pre-Market Plan',
     review: 'Review', mistakes: 'Mistakes', macro: 'Macro Notes', notes: 'Journal', help: 'Help & FAQ'
   };
 
@@ -39,6 +40,11 @@
     // Initialize ads (no-op on web, real AdMob on Android via Capacitor)
     if (window.Ads) {
       try { await Ads.init({ useTestAds: true }); } catch (e) { console.warn(e); }
+    }
+
+    // Start price alerts polling (no-op if no alerts active)
+    if (window.Alerts) {
+      try { Alerts.start(); } catch (e) { console.warn(e); }
     }
 
     // Re-render current tab on data changes — preserve scroll so the page
@@ -110,9 +116,9 @@
       </a>
     `).join('') + `
       <div class="more-divider"></div>
-      <button class="more-item" id="more-import"><i data-lucide="upload"></i><span>Import data</span></button>
-      <button class="more-item" id="more-export"><i data-lucide="download"></i><span>Export data</span></button>
-      <button class="more-item" id="more-report"><i data-lucide="file-text"></i><span>Performance report</span></button>
+      <button class="more-item" id="more-import"><i data-lucide="upload"></i><span>Import Data</span></button>
+      <button class="more-item" id="more-export"><i data-lucide="download"></i><span>Export Data</span></button>
+      <button class="more-item" id="more-report"><i data-lucide="file-text"></i><span>Performance Report</span></button>
       <button class="more-item" id="more-settings"><i data-lucide="settings"></i><span>Settings</span></button>
     `;
     Modal.open({ title: 'More', body, width: 480 });
@@ -141,10 +147,10 @@
       try { Tabs[id].render(c); }
       catch (e) {
         console.error(e);
-        c.innerHTML = `<div class="empty"><h3>Tab error</h3><div>${(e && e.message) || e}</div></div>`;
+        c.innerHTML = `<div class="empty"><h3>Tab Error</h3><div>${(e && e.message) || e}</div></div>`;
       }
     } else {
-      c.innerHTML = `<div class="empty"><h3>Coming soon</h3></div>`;
+      c.innerHTML = `<div class="empty"><h3>Coming Soon</h3></div>`;
     }
     if (location.hash !== '#' + id) location.hash = id;
     // Show/hide ad banner based on tab
@@ -218,21 +224,21 @@
     const form = document.createElement('form');
     form.innerHTML = `
       <div class="form-grid cols-2">
-        <div class="field"><label>Trader name</label><input name="trader_name" value="${esc(s.trader_name)}" /></div>
-        <div class="field"><label>Starting balance</label><input name="starting_balance" type="number" step="any" value="${s.starting_balance}" /></div>
+        <div class="field"><label>Trader Name</label><input name="trader_name" value="${esc(s.trader_name)}" /></div>
+        <div class="field"><label>Starting Balance</label><input name="starting_balance" type="number" step="any" value="${s.starting_balance}" /></div>
         <div class="field"><label>Currency</label>
           <select name="currency">
             ${['USD','EUR','GBP','AUD','NZD','CAD','JPY','INR','SGD','HKD'].map(c => `<option value="${c}" ${s.currency === c ? 'selected' : ''}>${c}</option>`).join('')}
           </select>
         </div>
-        <div class="field"><label>Daily goal</label><input name="g_daily" type="number" step="any" value="${s.goals.daily}" /></div>
-        <div class="field"><label>Weekly goal</label><input name="g_weekly" type="number" step="any" value="${s.goals.weekly}" /></div>
-        <div class="field"><label>Monthly goal</label><input name="g_monthly" type="number" step="any" value="${s.goals.monthly}" /></div>
-        <div class="field"><label>Yearly goal</label><input name="g_yearly" type="number" step="any" value="${s.goals.yearly}" /></div>
+        <div class="field"><label>Daily Goal</label><input name="g_daily" type="number" step="any" value="${s.goals.daily}" /></div>
+        <div class="field"><label>Weekly Goal</label><input name="g_weekly" type="number" step="any" value="${s.goals.weekly}" /></div>
+        <div class="field"><label>Monthly Goal</label><input name="g_monthly" type="number" step="any" value="${s.goals.monthly}" /></div>
+        <div class="field"><label>Yearly Goal</label><input name="g_yearly" type="number" step="any" value="${s.goals.yearly}" /></div>
       </div>
       <div class="divider"></div>
       <div style="display:flex; gap: 8px; flex-wrap: wrap;">
-        <button class="btn" type="button" id="reset-btn">Reset all data</button>
+        <button class="btn" type="button" id="reset-btn">Reset All Data</button>
         <span class="text-dim" style="font-size: 11px; align-self: center;">Wipes all trades, watchlist, patterns, etc. Cannot be undone.</span>
       </div>
     `;
@@ -261,7 +267,7 @@
     });
     save.addEventListener('click', () => form.requestSubmit());
     form.querySelector('#reset-btn').addEventListener('click', async () => {
-      if (await Modal.confirm({ title: 'Reset all data', message: 'This will permanently erase all trades, watchlist items, patterns, plans, reviews, and macro notes. Cannot be undone.', okText: 'Erase everything', danger: true })) {
+      if (await Modal.confirm({ title: 'Reset All Data', message: 'This will permanently erase all trades, watchlist items, patterns, plans, reviews, and macro notes. Cannot be undone.', okText: 'Erase Everything', danger: true })) {
         Store.reset();
         Toast.success('All data reset');
         Modal.close();
