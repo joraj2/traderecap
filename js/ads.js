@@ -107,9 +107,9 @@ window.Ads = (function () {
   async function showBanner() {
     if (bannerVisible) return;
     if (!isNative || !admob) {
-      // Web placeholder — render a subtle "Ad" placeholder bar so layout is consistent in dev
       paintWebPlaceholder(true);
       bannerVisible = true;
+      markBannerVisible(true);
       return;
     }
     try {
@@ -121,6 +121,7 @@ window.Ads = (function () {
         isTesting: useTestAds
       });
       bannerVisible = true;
+      markBannerVisible(true);
     } catch (e) { console.warn('[Ads] banner show failed', e); }
   }
 
@@ -129,10 +130,19 @@ window.Ads = (function () {
     if (!isNative || !admob) {
       paintWebPlaceholder(false);
       bannerVisible = false;
+      markBannerVisible(false);
       return;
     }
     try { await admob.hideBanner(); } catch (e) {}
     bannerVisible = false;
+    markBannerVisible(false);
+  }
+
+  // Toggle a body class so CSS can reserve space for the native banner
+  // (covers the bottom ~60px of the WebView at BOTTOM_CENTER ADAPTIVE_BANNER).
+  function markBannerVisible(on) {
+    if (!document || !document.body) return;
+    document.body.classList.toggle('ad-visible', !!on);
   }
 
   function paintWebPlaceholder(show) {

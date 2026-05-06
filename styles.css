@@ -1,63 +1,69 @@
-/* ===== Tokens (dark theme, indigo accent) ===== */
+/* ===== Tokens (light "warm paper" theme, ochre/brass accent) =====
+   Identity: editorial trading-journal feel — cream paper bg, graphite ink,
+   ochre/brass accent (XAUUSD nod), muted forest/brick for P&L tinting.
+   Deliberately not indigo — that's UltraTrader. */
 :root {
-  --bg: #0a0a12;
-  --bg-2: #0f0f1a;
-  --surface: #16161f;
-  --surface-2: #1c1c28;
-  --surface-3: #25253a;
-  --border: #2a2a3a;
-  --border-strong: #3a3a4d;
-  --text: #f5f5fa;
-  --text-2: #a8a8c0;
-  --text-3: #6f6f88;
+  --bg: #faf8f3;
+  --bg-2: #f4f1ea;
+  --surface: #ffffff;
+  --surface-2: #f7f4ed;
+  --surface-3: #ebe6da;
+  --border: #e3ddcf;
+  --border-strong: #cdc4ad;
+  --text: #1a1717;
+  --text-2: #5c5751;
+  --text-3: #8a857c;
 
-  /* Primary accent: indigo */
-  --primary: #6366f1;
-  --primary-bright: #818cf8;
-  --primary-soft: rgba(99,102,241,0.12);
-  --primary-soft-2: rgba(99,102,241,0.28);
+  /* Primary accent: ochre / brass */
+  --primary: #8b6f47;
+  --primary-bright: #a07f50;
+  --primary-soft: rgba(139, 111, 71, 0.10);
+  --primary-soft-2: rgba(139, 111, 71, 0.22);
 
-  /* Backwards-compat aliases — many components reference --green-* as the primary */
-  --green: #22c55e;
-  --green-bright: #4ade80;
-  --green-soft: rgba(99,102,241,0.12);
-  --green-soft-2: rgba(99,102,241,0.28);
+  /* Legacy --green-* aliases (referenced widely as the "primary" color) */
+  --green: var(--primary);
+  --green-bright: var(--primary-bright);
+  --green-soft: var(--primary-soft);
+  --green-soft-2: var(--primary-soft-2);
 
-  /* P&L semantic colors (kept for win/loss tinting; tweaked for dark contrast) */
-  --pnl-pos: #22c55e;
-  --pnl-pos-bright: #4ade80;
-  --pnl-pos-soft: rgba(34,197,94,0.14);
-  --pnl-pos-soft-2: rgba(34,197,94,0.28);
-  --pnl-neg: #ef4444;
-  --pnl-neg-bright: #f87171;
-  --pnl-neg-soft: rgba(239,68,68,0.14);
-  --pnl-neg-soft-2: rgba(239,68,68,0.28);
+  /* P&L semantic colors — muted forest / brick for editorial light theme */
+  --pnl-pos: #2d6a4f;
+  --pnl-pos-bright: #3a7e5f;
+  --pnl-pos-soft: rgba(45, 106, 79, 0.10);
+  --pnl-pos-soft-2: rgba(45, 106, 79, 0.22);
+  --pnl-neg: #9d2c2c;
+  --pnl-neg-bright: #b13b3b;
+  --pnl-neg-soft: rgba(157, 44, 44, 0.10);
+  --pnl-neg-soft-2: rgba(157, 44, 44, 0.22);
 
   --red: var(--pnl-neg);
   --red-bright: var(--pnl-neg-bright);
   --red-soft: var(--pnl-neg-soft);
   --red-soft-2: var(--pnl-neg-soft-2);
 
-  --amber: #f59e0b;
-  --amber-soft: rgba(245,158,11,0.18);
-  --blue: #60a5fa;
+  --amber: #b88a2e;
+  --amber-soft: rgba(184, 138, 46, 0.14);
+  --blue: #2f5d8e;
 
-  --radius: 12px;
-  --radius-sm: 8px;
-  --radius-lg: 18px;
+  /* Tighter editorial radii — less app-store generic */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 14px;
   --radius-pill: 999px;
-  --shadow-1: 0 1px 2px rgba(0,0,0,.35);
-  --shadow-2: 0 12px 32px rgba(0,0,0,.45);
+  --shadow-1: 0 1px 2px rgba(40, 30, 15, 0.06);
+  --shadow-2: 0 10px 28px rgba(40, 30, 15, 0.10);
 
   --font: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Serif headline for stat values — gives the journal/editorial identity */
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
 
   --sidebar-w: 232px;
   --topbar-h: 64px;
 }
 
 /* ===== Reset ===== */
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { margin: 0; padding: 0; height: 100%; }
 html, body { overflow-x: hidden; max-width: 100vw; }
 body {
@@ -68,7 +74,18 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Native-app feel: no rubber-band, no pull-to-refresh, no chrome text-select */
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
+/* Re-enable selection where it's actually useful (inputs, journal text, etc.) */
+input, textarea, select, [contenteditable="true"], .selectable, .selectable * {
+  -webkit-user-select: text;
+  user-select: text;
+}
+button, a, .btn, .bn-item, .bn-fab, .nav-item { touch-action: manipulation; }
 h1, h2, h3, h4, h5, h6 { line-height: 1.3; }
 button { font: inherit; color: inherit; cursor: pointer; }
 input, select, textarea { font: inherit; color: inherit; }
@@ -79,6 +96,11 @@ a { color: inherit; text-decoration: none; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 6px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+/* Hide scrollbars entirely on mobile — native apps don't show them */
+@media (max-width: 700px) {
+  ::-webkit-scrollbar { width: 0; height: 0; display: none; }
+  * { scrollbar-width: none; }
+}
 
 /* ===== Layout ===== */
 .app {
@@ -166,9 +188,18 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   padding: 0 24px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  border-bottom: 1px solid transparent;
+  background: rgba(250, 248, 243, 0.78);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
+  backdrop-filter: saturate(160%) blur(18px);
   position: sticky; top: 0; z-index: 5;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+/* Elevation cue once content has scrolled — body.is-scrolled is toggled in app.js */
+body.is-scrolled .topbar {
+  background: rgba(250, 248, 243, 0.94);
+  border-bottom-color: var(--border);
+  box-shadow: 0 4px 14px rgba(40, 30, 15, 0.08);
 }
 .page-title { font-size: 17px; font-weight: 600; margin: 0; }
 .top-actions { margin-left: auto; display: flex; gap: 8px; align-items: center; }
@@ -198,9 +229,9 @@ a { color: inherit; text-decoration: none; }
   font-weight: 600;
   border-radius: var(--radius-pill);
   padding: 0 18px;
-  box-shadow: 0 0 0 1px rgba(129,140,248,0.25), 0 4px 14px rgba(99,102,241,.28);
+  box-shadow: 0 0 0 1px var(--primary-soft-2), 0 2px 8px rgba(40, 30, 15, 0.10);
 }
-.btn-primary:hover { filter: brightness(1.08); border-color: var(--primary-bright); }
+.btn-primary:hover { filter: brightness(1.04); border-color: var(--primary-bright); }
 .btn-block { width: 100%; justify-content: flex-start; }
 .btn-danger { color: var(--pnl-neg-bright); border-color: var(--pnl-neg-soft-2); background: transparent; }
 .btn-danger:hover { background: var(--pnl-neg-soft); }
@@ -290,12 +321,12 @@ a { color: inherit; text-decoration: none; }
   opacity: .6;
 }
 .stat-card.is-positive {
-  background: linear-gradient(180deg, rgba(34,197,94,0.05), transparent 60%), var(--surface);
-  border-color: rgba(34,197,94,0.22);
+  background: linear-gradient(180deg, var(--pnl-pos-soft), transparent 70%), var(--surface);
+  border-color: var(--pnl-pos-soft-2);
 }
 .stat-card.is-negative {
-  background: linear-gradient(180deg, rgba(239,68,68,0.05), transparent 60%), var(--surface);
-  border-color: rgba(239,68,68,0.22);
+  background: linear-gradient(180deg, var(--pnl-neg-soft), transparent 70%), var(--surface);
+  border-color: var(--pnl-neg-soft-2);
 }
 .stat-label {
   display: flex; align-items: center; gap: 6px;
@@ -311,15 +342,18 @@ a { color: inherit; text-decoration: none; }
   font-size: 9px; color: var(--text-3);
 }
 .stat-value {
-  font-family: var(--font-mono);
-  font-size: 26px;
-  font-weight: 600;
-  letter-spacing: -.01em;
+  /* Editorial serif headline — TradeRecap signature, distinct from generic SaaS */
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -.015em;
   color: var(--text);
+  font-feature-settings: "lnum" 1, "tnum" 1;
 }
-.stat-sub { margin-top: 4px; font-size: 11px; color: var(--text-3); }
-.is-positive .stat-value { color: var(--pnl-pos-bright); }
-.is-negative .stat-value { color: var(--pnl-neg-bright); }
+/* Numeric values that aren't headlines stay mono (tables, inline rows). */
+.stat-sub { margin-top: 4px; font-size: 11px; color: var(--text-3); font-family: var(--font-mono); }
+.is-positive .stat-value { color: var(--pnl-pos); }
+.is-negative .stat-value { color: var(--pnl-neg); }
 
 /* ===== Hero (greeting card) ===== */
 .hero {
@@ -368,6 +402,7 @@ a { color: inherit; text-decoration: none; }
 /* ===== Tables ===== */
 .table-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .table { width: 100%; border-collapse: collapse; }
+.table th { white-space: nowrap; }
 .table th, .table td {
   text-align: left;
   padding: 12px 14px;
@@ -662,11 +697,11 @@ a { color: inherit; text-decoration: none; }
   display: none;
   position: fixed;
   left: 0; right: 0; bottom: 0;
-  background: rgba(15, 15, 26, 0.92);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 253, 248, 0.92);
+  backdrop-filter: saturate(160%) blur(18px);
+  -webkit-backdrop-filter: saturate(160%) blur(18px);
   border-top: 1px solid var(--border);
-  box-shadow: 0 -2px 16px rgba(0,0,0,.4);
+  box-shadow: 0 -2px 14px rgba(40, 30, 15, 0.06);
   padding: 6px 4px calc(6px + env(safe-area-inset-bottom)) 4px;
   z-index: 50;
   justify-content: space-around;
@@ -691,24 +726,35 @@ a { color: inherit; text-decoration: none; }
 .bottom-nav .bn-item.active {
   color: var(--primary-bright);
 }
-.bottom-nav .bn-item.active .lucide { filter: drop-shadow(0 0 8px rgba(129,140,248,0.65)); }
+.bottom-nav .bn-item.active .lucide { filter: none; }
 
-/* Centered + button in bottom nav (UltraTrader-style) */
+/* Centered + button — flat editorial brass pill, NOT the UltraTrader lifted gradient.
+   Sits flush in the nav row; signature TradeRecap "log" CTA. */
 .bottom-nav .bn-fab {
   flex: 0 0 auto;
-  width: 58px; height: 58px;
-  margin: -22px 4px 0;
-  background: linear-gradient(180deg, var(--primary-bright), var(--primary));
-  color: #ffffff;
-  border: 4px solid var(--bg);
-  border-radius: 999px;
-  box-shadow: 0 10px 24px rgba(99,102,241,0.45), 0 0 0 1px rgba(129,140,248,0.5);
+  flex-direction: row;
+  gap: 4px;
+  width: auto;
+  min-width: 76px;
+  height: 40px;
+  padding: 0 14px;
+  margin: 8px 6px 0;
+  background: var(--primary);
+  color: #fffaf0;
+  border: 1px solid var(--primary);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 1px 0 rgba(40, 30, 15, 0.06);
   align-self: center;
   min-height: 0;
+  letter-spacing: .08em;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
 }
-.bottom-nav .bn-fab .lucide { width: 28px; height: 28px; stroke-width: 2.6; }
-.bottom-nav .bn-fab:active { transform: scale(0.94); }
-.bottom-nav .bn-fab.active { color: #ffffff; }
+.bottom-nav .bn-fab > span { color: inherit; line-height: 1; }
+.bottom-nav .bn-fab .lucide { width: 16px; height: 16px; stroke-width: 2.6; }
+.bottom-nav .bn-fab:active { transform: scale(0.97); background: var(--primary-bright); }
+.bottom-nav .bn-fab.active { color: #fffaf0; }
 .bottom-nav .bn-fab.active .lucide { filter: none; }
 
 /* ===== FAB (floating add-trade button on phones) ===== */
@@ -744,6 +790,13 @@ a { color: inherit; text-decoration: none; }
   font-size: 11px; color: var(--text-3); letter-spacing: .14em; text-transform: uppercase;
   z-index: 40;
 }
+
+/* ===== Native AdMob banner reservation =====
+   When the AdMob banner is showing it overlays the bottom of the WebView.
+   ADAPTIVE_BANNER is ~50–60dp; reserve 60px so the bottom-nav and last
+   row of content sit above it. Body gets the .ad-visible class from Ads.js. */
+:root { --ad-h: 0px; }
+body.ad-visible { --ad-h: 60px; }
 
 /* ===== More sheet (mobile overflow menu) ===== */
 .more-sheet { display: flex; flex-direction: column; gap: 2px; }
@@ -877,10 +930,10 @@ a { color: inherit; text-decoration: none; }
   .top-actions .btn-primary { display: none; }   /* FAB replaces it on phone */
 
   .content {
-    padding: 14px 12px calc(80px + env(safe-area-inset-bottom)) 12px;
+    padding: 14px 12px calc(80px + env(safe-area-inset-bottom) + var(--ad-h)) 12px;
     max-width: 100%;
   }
-  .bottom-nav { display: flex; }
+  .bottom-nav { display: flex; bottom: var(--ad-h); }
   /* Floating right-side FAB is no longer used — replaced by centered bn-fab */
   .fab { display: none !important; }
 
@@ -929,12 +982,12 @@ a { color: inherit; text-decoration: none; }
     margin-top: auto;
     align-self: flex-end;
   }
-  .modal-bg { align-items: flex-end; padding-bottom: env(safe-area-inset-bottom); }
+  .modal-bg { align-items: flex-end; padding-bottom: calc(env(safe-area-inset-bottom) + var(--ad-h)); }
   .modal-body { padding: 16px; }
   .modal-foot { padding: 12px 16px calc(12px + env(safe-area-inset-bottom)) 16px; flex-wrap: wrap; }
 
-  /* Toasts above bottom-nav */
-  #toast-root { bottom: calc(80px + env(safe-area-inset-bottom)); right: 12px; left: 12px; }
+  /* Toasts above bottom-nav (and above the ad banner when visible) */
+  #toast-root { bottom: calc(80px + env(safe-area-inset-bottom) + var(--ad-h)); right: 12px; left: 12px; }
   .toast { width: auto; }
 
   /* Touch targets */
@@ -1240,7 +1293,7 @@ a { color: inherit; text-decoration: none; }
   border: 3px solid var(--surface);
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.5);
+  box-shadow: 0 2px 6px rgba(40, 30, 15, 0.18);
 }
 .range-slider::-moz-range-thumb {
   width: 22px; height: 22px;
@@ -1248,7 +1301,7 @@ a { color: inherit; text-decoration: none; }
   border: 3px solid var(--surface);
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(99,102,241,0.5);
+  box-shadow: 0 2px 6px rgba(40, 30, 15, 0.18);
 }
 .conviction-val {
   margin-left: 8px;
@@ -1257,27 +1310,43 @@ a { color: inherit; text-decoration: none; }
   font-size: 12px;
 }
 
-/* ===== Recent symbol chips ===== */
+/* ===== Recent symbol chips — single-row horizontal swipe ===== */
 .recent-symbols {
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
   margin-bottom: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Bleed slightly past the form padding so chips can scroll edge-to-edge */
+  margin-left: -2px;
+  padding: 2px 12px 4px 2px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  /* Soft fade on the right edge to hint there's more to swipe */
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
+          mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent 100%);
 }
+.recent-symbols::-webkit-scrollbar { display: none; }
 .recent-chip {
-  background: var(--surface-2);
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text-2);
   font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 600;
-  padding: 5px 10px;
+  padding: 6px 12px;
   border-radius: var(--radius-pill);
   cursor: pointer;
   transition: background .15s ease, color .15s ease, border-color .15s ease;
   -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
 }
 .recent-chip:hover, .recent-chip:active {
   background: var(--primary-soft);
-  color: var(--primary-bright);
+  color: var(--primary);
   border-color: var(--primary-soft-2);
 }
 

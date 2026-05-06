@@ -30,6 +30,7 @@
     wireKeyboard();
     wireMobileMenu();
     wireFab();
+    wireScrollElevation();
     await Store.loadAll();
 
     // First-launch onboarding (blocks until user provides name + capital)
@@ -100,8 +101,9 @@
           <span>${n.label}</span>
         </a>
       `).join('')}
-      <button class="bn-item bn-fab" id="bn-add" aria-label="Add Trade">
+      <button class="bn-item bn-fab" id="bn-add" aria-label="Log Trade">
         <i data-lucide="plus"></i>
+        <span>Log</span>
       </button>
       ${right.map(n => `
         <a href="#${n.id}" class="bn-item" data-tab="${n.id}">
@@ -170,6 +172,21 @@
     const btn = document.getElementById('mobile-menu-btn');
     if (!btn) return;
     btn.addEventListener('click', openMoreSheet);
+  }
+
+  // Toggle body.is-scrolled so the topbar gets its elevation/shadow once
+  // content has moved beneath it — the cue that makes a webview feel native.
+  function wireScrollElevation() {
+    let ticking = false;
+    const update = () => {
+      const scrolled = (window.scrollY || document.documentElement.scrollTop || 0) > 4;
+      document.body.classList.toggle('is-scrolled', scrolled);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(update); ticking = true; }
+    }, { passive: true });
+    update();
   }
 
   function wireFab() {
