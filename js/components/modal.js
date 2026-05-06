@@ -16,7 +16,10 @@ window.Modal = (function () {
       </div>
     `;
     if (width) {
-      overlay.querySelector('.modal').style.width = `min(${width}px, calc(100vw - 32px))`;
+      // Use max-width (not width) so mobile's `.modal { width: 100vw }` rule wins.
+      // Setting width inline overrides the media query and produces a wider-than-
+      // viewport modal that scrolls horizontally inside the WebView.
+      overlay.querySelector('.modal').style.maxWidth = `${width}px`;
     }
     const bodyEl = overlay.querySelector('.modal-body');
     if (typeof body === 'string') bodyEl.innerHTML = body;
